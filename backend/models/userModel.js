@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 const userSchema = new Schema(
   {
     username: { type: String }, // hier später wieder required einfügen
-    email: { type: String, unique: true }, // hier später wieder required einfügen
+    email: { type: String }, // hier später wieder required einfügen und unique
     password: { type: String }, // hier später wieder required einfügen
     calendars: { type: mongoose.Schema.Types.ObjectId, ref: "Calendar" },
   },

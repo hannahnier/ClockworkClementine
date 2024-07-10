@@ -13,6 +13,9 @@ const RegisterPage = () => {
     setLoggedIn,
     errorMessage,
     setErrorMessage,
+    activeUser,
+    setActiveUser,
+    logIn,
   } = useCalContext();
 
   const [inputData, setInputData] = useState({
@@ -27,8 +30,6 @@ const RegisterPage = () => {
 
   useEffect(() => {
     if (loggedIn) {
-      console.log("loggedIn:", loggedIn);
-      console.log("hier");
       navigate("/calendars");
     }
   }, [loggedIn]);
@@ -43,13 +44,21 @@ const RegisterPage = () => {
       });
       if (!res.ok) {
         const errorData = await res.json();
-        const someError = errorData.error || "Unknown error";
+        let someError =
+          errorData.error?.errorResponse?.errmsg ||
+          errorData.error ||
+          "Unknown error";
+        if (errorData.error?.errorResponse?.code === 11000) {
+          someError =
+            "An account linked to this email already exists. Please try login or sign up with a different email address.";
+        }
         setErrorMessage(someError);
         throw new Error(someError);
       }
 
       const resData = await res.json();
-
+      setActiveUser(resData);
+      logIn();
       setLoggedIn(true);
     } catch (err) {
       setErrorMessage(err.message || "An unknown error occured.");
@@ -102,7 +111,7 @@ const RegisterPage = () => {
       )}
       {errorMessage && (
         <div>
-          <p>An error occured: {errorMessage}</p>
+          <p>{errorMessage}</p>
           <button
             onClick={() => {
               setErrorMessage(false);

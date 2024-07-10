@@ -8,6 +8,25 @@ const ContextProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [firstVisit, setFirstVisit] = useState(false);
+  const [activeUser, setActiveUser] = useState({ email: "", password: "" });
+
+  const baseUrl = "http://localhost:3000";
+
+  const logIn = async () => {
+    const res = await fetch(`${baseUrl}/users/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(activeUser),
+    });
+  };
+
+  const signUp = async () => {
+    const res = await fetch(`${baseUrl}/users/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(activeUser),
+    });
+  };
 
   return (
     <CalContext.Provider
@@ -22,6 +41,10 @@ const ContextProvider = ({ children }) => {
         setErrorMessage,
         firstVisit,
         setFirstVisit,
+        activeUser,
+        setActiveUser,
+        logIn,
+        signUp,
       }}
     >
       {children}
