@@ -11,6 +11,7 @@ import { calendarRouter } from "./router/calendarRouter.js";
 
 dotenv.config();
 const { DB_CONNECTION_STRING, PORT } = process.env;
+
 const port = PORT || 3000;
 
 const app = express();
