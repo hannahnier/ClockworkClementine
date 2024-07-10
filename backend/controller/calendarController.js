@@ -15,7 +15,7 @@ export const getCalendar = async (req, res, next) => {
     console.log(id);
     const calendar = await Calendar.findById(id);
     if (!calendar) {
-      return res.status(404).json({ error: "calendar not found" });
+      return res.status(404).json({ error: "Calendar not found" });
     }
     res.status(200).json(calendar);
   } catch (err) {
@@ -57,7 +57,7 @@ export const updateCalendar = async (req, res, next) => {
     const options = { new: true, runValidators: true };
     const updated = await Calendar.findByIdAndUpdate(id, newCalendar, options);
     if (!updated) {
-      return res.status(500).json({ error: "updating calendar failed" });
+      return res.status(500).json({ error: "Updating calendar failed" });
     }
     res.status(200).json(updated);
   } catch (err) {

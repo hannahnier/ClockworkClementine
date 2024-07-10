@@ -28,12 +28,12 @@ export const postUser = async (req, res, next) => {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
       return res.status(400).json({
-        error: "information (username, email or password) missing in request",
+        error: "Information (username, email or password) missing in request",
       });
     }
     const hashed = await bcrypt.hash(password, 10);
     if (!hashed) {
-      return res.status(500).json({ error: "hashing not successful" });
+      return res.status(500).json({ error: "Hashing not successful" });
     }
     const newUser = { username, email, password: hashed };
     const created = await User.create(newUser);
