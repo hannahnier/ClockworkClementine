@@ -16,8 +16,7 @@ const CalendarsPage = () => {
 
   return (
     <div>
-      CalendarsPage
-      <h1>My Calendar</h1>
+      <h2>My Calendar</h2>
       {calendars.length > 0 && calendars[0].title}
       {calendars.length > 0 && (
         <FullCalendar
