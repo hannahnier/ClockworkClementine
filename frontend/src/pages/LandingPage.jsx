@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCalContext } from "../utils/ContextProvider";
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const { loggedIn, setLoggedIn, firstVisit, setFirstVisit } = useCalContext();
+  const { activeUser, firstVisit, setFirstVisit } = useCalContext();
 
   useEffect(() => {
     const timer = setTimeout(() => setFirstVisit(true), 100);
@@ -20,7 +20,7 @@ const LandingPage = () => {
         <div className={`clockHand1 ${firstVisit ? "transition" : ""}`}></div>
         <div className={`clockHand2 ${firstVisit ? "transition" : ""}`}></div>
       </div>
-      {!loggedIn && (
+      {!activeUser && (
         <button
           className={`startButton ${firstVisit ? "transition" : ""}`}
           onClick={() => navigate("/login")}
@@ -28,7 +28,7 @@ const LandingPage = () => {
           Login
         </button>
       )}
-      {!loggedIn && (
+      {!activeUser && (
         <button
           className={`startButton ${firstVisit ? "transition" : ""}`}
           onClick={() => navigate("/register")}
@@ -37,7 +37,7 @@ const LandingPage = () => {
         </button>
       )}
 
-      {loggedIn && (
+      {activeUser && (
         <button
           className={`startButton ${firstVisit ? "transition" : ""}`}
           onClick={() => navigate("/calendars")}

@@ -1,20 +1,13 @@
-import { User } from "../models/userModel.js";
 import bcrypt from "bcrypt";
-import { createToken } from "../utils/jwt.js";
 
-export const getAllUsers = async (req, res, next) => {
-  try {
-    const users = await User.find({});
-    res.status(200).json(users);
-  } catch (err) {
-    next(err);
-  }
-};
+import { User } from "../models/userModel.js";
+import { jwtSign } from "../utils/jwt.js";
 
 export const getUser = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate("calendars");
+    console.log(user);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -36,59 +29,88 @@ export const postUser = async (req, res, next) => {
     if (!hashed) {
       return res.status(500).json({ error: "Hashing not successful" });
     }
-    const newUser = { username, email, password: hashed };
+    const newUser = {
+      username,
+      email,
+      password: hashed,
+    };
     const created = await User.create(newUser);
     if (!created) {
       return res
         .status(500)
         .json({ error: "User could not be created in database" });
     }
-    res.status(201).json(created);
+    req.body.id = created._id;
+    next();
   } catch (err) {
     next(err);
   }
 };
 
-export const updateUser = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const oldUser = await User.findById(id);
-    if (!oldUser) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    const username = req.body.username || oldUser.username;
-    const email = req.body.email || oldUser.email;
-    const password =
-      (await bcrypt.hash(req.body.password, 10)) || oldUser.password;
-    const newUser = { username, email, password };
-    const options = { new: true, runValidators: true };
-    const updated = await User.findByIdAndUpdate(id, newUser, options);
-    if (!updated) {
-      return res.status(500).json({ error: "updating user failed" });
-    }
-    res.status(200).json(updated);
-  } catch (err) {
-    next(err);
-  }
-};
+// export const createFirstCalendar = async (req, res, next) => {
+//   try {
+//     const { id } = req.body;
 
-export const deleteUser = async (req, res, next) => {
+//     const user = await User.findById(id);
+//     console.log("user", user);
+//     const userUpdate = {
+//       ...user,
+//       [calendars]: [
+//         {
+//           title: "My first calendar",
+//           user: id,
+//           events: [{ title: "First event", date: "2024-07-11" }],
+//         },
+//       ],
+//     };
+
+//     const updated = await User.findByIdAndUpdate(id, userUpdate, { new: true });
+//     console.log("updated", updated);
+//     next();
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
+export const setCookie = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const deleted = await User.findByIdAndDelete(id);
-    if (!deleted) {
+    const { email } = req.body;
+    const user = await User.findOne({ email: email });
+    if (!user) {
       return res
         .status(404)
-        .json({ error: "User not found or could not be deleted." });
+        .json({ error: "No user with this email address found." });
     }
-    res.status(200).json({ deleted: deleted });
+    const token = await jwtSign(email, user._id);
+    if (!token) {
+      return res
+        .status(500)
+        .json({ error: "Access token could not be created." });
+    }
+    res.cookie("accessToken", token, {
+      maxAge: 1000 * 60 * 5,
+      path: "/",
+      httpOnly: true,
+    });
+    // hier bei rememberMe: true die Zeit auf 30 Tage setzen
+    return res
+      .status(200)
+      .json({ id: user._id, username: user.username, email: user.email });
   } catch (err) {
     next(err);
   }
 };
 
-export const loginCheckPassword = async (req, res, next) => {
-  console.log("1");
+export const removeCookie = async (req, res, next) => {
+  try {
+    res.clearCookie("accessToken");
+    res.status(200).json({ user: null });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const checkPassword = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -97,40 +119,64 @@ export const loginCheckPassword = async (req, res, next) => {
         .json({ error: "Missing information (email or password)." });
     }
     const orgUser = await User.findOne({ email: email });
-    console.log("orgUser", orgUser);
     const orgHashed = orgUser.password;
-    console.log("orgHashed: ", orgHashed, "password: ", password);
     const match = await bcrypt.compare(password, orgHashed);
-    console.log("match", match);
     if (!match) {
       return res
         .status(400)
         .json({ error: "Login failed. Wrong email or password." });
     }
-    res.status(200).json({ message: "Login successful." });
+    next();
   } catch (err) {
     next(err);
   }
 };
 
-export const loginCreateToken = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-    console.log("test");
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ error: "Missing information (email or password)." });
-    }
-    const token = await createToken(email, password);
-    console.log("x");
-    if (!token) {
-      return res
-        .status(500)
-        .json({ error: "Access token could not be created." });
-    }
-    res.status(200).json(token); // in cookies speichern
-  } catch (err) {
-    next(err);
-  }
-};
+// rememberMe noch einbauen in controllers
+
+// export const getAllUsers = async (req, res, next) => {
+//   try {
+//     const users = await User.find({});
+//     res.status(200).json(users);
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
+// export const updateUser = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const oldUser = await User.findById(id);
+//     if (!oldUser) {
+//       return res.status(404).json({ error: "User not found" });
+//     }
+//     const username = req.body.username || oldUser.username;
+//     const email = req.body.email || oldUser.email;
+//     const password =
+//       (await bcrypt.hash(req.body.password, 10)) || oldUser.password;
+//     const newUser = { username, email, password };
+//     const options = { new: true, runValidators: true };
+//     const updated = await User.findByIdAndUpdate(id, newUser, options);
+//     if (!updated) {
+//       return res.status(500).json({ error: "updating user failed" });
+//     }
+//     res.status(200).json(updated);
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
+// export const deleteUser = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const deleted = await User.findByIdAndDelete(id);
+//     if (!deleted) {
+//       return res
+//         .status(404)
+//         .json({ error: "User not found or could not be deleted." });
+//     }
+//     res.status(200).json({ deleted: deleted });
+//   } catch (err) {
+//     next(err);
+//   }
+// };

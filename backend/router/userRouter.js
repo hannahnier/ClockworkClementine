@@ -1,18 +1,21 @@
 import express from "express";
 
 import {
-  getAllUsers,
+  // getAllUsers,
   getUser,
   postUser,
-  updateUser,
-  deleteUser,
-  loginCheckPassword,
-  loginCreateToken,
+  // updateUser,
+  // deleteUser,
+  checkPassword,
+  setCookie,
+  removeCookie,
 } from "../controller/userController.js";
 
 export const userRouter = express.Router();
 
-userRouter.route("/").get(getAllUsers).post(postUser);
-userRouter.route("/login").post(loginCheckPassword, loginCreateToken);
-userRouter.route("/register").post(loginCreateToken);
-userRouter.route("/:id").get(getUser).patch(updateUser).delete(deleteUser);
+// userRouter.route("/").get(getAllUsers);
+userRouter.route("/register").post(postUser, setCookie);
+userRouter.route("/login").post(checkPassword, setCookie);
+userRouter.route("/logout").post(removeCookie);
+userRouter.route("/:id").get(getUser);
+// .patch(updateUser).delete(deleteUser);

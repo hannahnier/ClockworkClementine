@@ -1,22 +1,11 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCalContext } from "../utils/ContextProvider";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const {
-    calendars,
-    setCalendars,
-    users,
-    setUsers,
-    loggedIn,
-    setLoggedIn,
-    errorMessage,
-    setErrorMessage,
-    activeUser,
-    setActiveUser,
-    logIn,
-  } = useCalContext();
+  const { activeUser, setActiveUser, errorMessage, setErrorMessage, baseUrl } =
+    useCalContext();
 
   const [inputData, setInputData] = useState({
     username: "",
@@ -29,18 +18,19 @@ const RegisterPage = () => {
   }, []);
 
   useEffect(() => {
-    if (loggedIn) {
+    if (activeUser) {
       navigate("/calendars");
     }
-  }, [loggedIn]);
+  }, [activeUser]);
 
-  const postUser = async (e) => {
+  const registerUser = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/users", {
+      const res = await fetch(`${baseUrl}/users/register`, {
         method: "POST",
         body: JSON.stringify(inputData),
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
       });
       if (!res.ok) {
         const errorData = await res.json();
@@ -58,8 +48,6 @@ const RegisterPage = () => {
 
       const resData = await res.json();
       setActiveUser(resData);
-      logIn();
-      setLoggedIn(true);
     } catch (err) {
       setErrorMessage(err.message || "An unknown error occured.");
     }
@@ -68,46 +56,61 @@ const RegisterPage = () => {
   return (
     <div>
       <h2> {errorMessage ? "Error" : "Registration"}</h2>
-      {!errorMessage && !loggedIn && (
-        <form
-          onSubmit={(e) => {
-            postUser(e);
-          }}
-        >
-          <label htmlFor="username">Username: </label>
-          <input
-            type="text"
-            name="username"
-            id="username"
-            value={inputData.username}
-            onChange={(e) => {
-              setInputData({ ...inputData, [e.target.name]: e.target.value });
+      {!errorMessage && !activeUser && (
+        <div className="formContainer">
+          <form
+            onSubmit={(e) => {
+              registerUser(e);
             }}
-          />
+          >
+            <label htmlFor="username">Username: </label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              value={inputData.username}
+              onChange={(e) => {
+                setInputData({ ...inputData, [e.target.name]: e.target.value });
+              }}
+            />
 
-          <label htmlFor="email">Email: </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value={inputData.email}
-            onChange={(e) => {
-              setInputData({ ...inputData, [e.target.name]: e.target.value });
-            }}
-          />
+            <label htmlFor="email">Email: </label>
+            <input
+              type="text" // hier später wieder email
+              name="email"
+              id="email"
+              value={inputData.email}
+              onChange={(e) => {
+                setInputData({ ...inputData, [e.target.name]: e.target.value });
+              }}
+            />
 
-          <label htmlFor="password">Password: </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            value={inputData.password}
-            onChange={(e) => {
-              setInputData({ ...inputData, [e.target.name]: e.target.value });
-            }}
-          />
-          <button type="submit">Sign up</button>
-        </form>
+            <label htmlFor="password">Password: </label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              value={inputData.password}
+              onChange={(e) => {
+                setInputData({ ...inputData, [e.target.name]: e.target.value });
+              }}
+            />
+            <label className="labelInline" htmlFor="rememberMe">
+              Remember me
+            </label>
+            <input
+              className="inputInline"
+              type="checkbox"
+              id="rememberMe"
+              name="rememberMe"
+            />
+            <button type="submit">Sign up</button>
+          </form>
+          <p>
+            Already have an account?{" "}
+            <Link onClick={() => navigate("/login")}>Login</Link>
+          </p>
+        </div>
       )}
       {errorMessage && (
         <div>

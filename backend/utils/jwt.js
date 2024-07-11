@@ -4,15 +4,13 @@ import dotenv from "dotenv";
 dotenv.config();
 const { ACCESS_TOKEN_SECRET } = process.env;
 
-export const createToken = async (email, password) => {
-  console.log("hier1");
-  return await jwt.sign({ email, password }, ACCESS_TOKEN_SECRET, {
+export const jwtSign = async (email, id) => {
+  return await jwt.sign({ email, id }, ACCESS_TOKEN_SECRET, {
     expiresIn: "120m",
   });
 };
 
-export const checkToken = async () => {
-  console.log("hier2");
+export const jwtVerify = async (token) => {
   return await jwt.verify(token, ACCESS_TOKEN_SECRET, (error, payload) => {
     console.log("error & payload:", error, payload);
     if (error) {

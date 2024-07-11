@@ -6,7 +6,8 @@ const userSchema = new Schema(
     username: { type: String }, // hier später wieder required einfügen
     email: { type: String }, // hier später wieder required einfügen und unique
     password: { type: String }, // hier später wieder required einfügen
-    calendars: { type: mongoose.Schema.Types.ObjectId, ref: "Calendar" },
+    calendars: { type: mongoose.Schema.Types.ObjectId, ref: "Calendars" },
+    rememberMe: { type: Boolean },
   },
   { versionKey: false }
 );
