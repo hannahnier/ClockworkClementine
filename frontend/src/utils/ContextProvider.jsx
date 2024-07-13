@@ -5,14 +5,13 @@ export const CalContext = createContext();
 const ContextProvider = ({ children }) => {
   const [calendars, setCalendars] = useState(["test"]);
   const [events, setEvents] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
-  const [newEvent, setNewEvent] = useState({ title: "", date: null });
   const [users, setUsers] = useState([]);
   const [activeUser, setActiveUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [firstVisit, setFirstVisit] = useState(false);
 
-  const baseUrl = "https://clockworkclementineserver.onrender.com"; // "http://localhost:3000"
+  // const baseUrl = "https://clockworkclementineserver.onrender.com";
+  const baseUrl = "http://localhost:3000";
 
   return (
     <CalContext.Provider
@@ -30,10 +29,6 @@ const ContextProvider = ({ children }) => {
         firstVisit,
         setFirstVisit,
         baseUrl,
-        showPopup,
-        setShowPopup,
-        newEvent,
-        setNewEvent,
       }}
     >
       {children}

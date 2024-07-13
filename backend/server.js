@@ -7,6 +7,7 @@ import { connectToDb } from "./utils/dbConnect.js";
 import { errorMiddleware } from "./controller/errorMiddleware.js";
 import { userRouter } from "./router/userRouter.js";
 import { calendarRouter } from "./router/calendarRouter.js";
+import { eventRouter } from "./router/eventRouter.js";
 
 dotenv.config();
 const { DB_CONNECTION_STRING, PORT } = process.env;
@@ -19,15 +20,17 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://clockworkclementine.onrender.com",
+    // origin: "https://clockworkclementine.onrender.com",
+    origin: "http://localhost:5173",
     credentials: true,
-  }) // http://localhost:5173
+  })
 );
 
 await connectToDb(DB_CONNECTION_STRING);
 
 app.use("/users", userRouter);
 app.use("/calendars", calendarRouter);
+app.use("/api", eventRouter);
 app.use(errorMiddleware);
 
 app.listen(port, () => {

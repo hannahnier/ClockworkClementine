@@ -2,30 +2,30 @@ import mongoose from "mongoose";
 import validator from "validator";
 
 const { Schema, model } = mongoose;
-const userSchema = new Schema(
+
+const eventSchema = new Schema(
   {
-    username: {
+    start: {
+      type: String,
+      set: function (input) {
+        return validator.escape(input);
+      }, // required machen?
+    },
+    end: {
+      type: String,
+      set: function (input) {
+        return validator.escape(input);
+      }, // required machen?
+    },
+    title: {
       type: String,
       set: function (input) {
         return validator.escape(input);
       },
-    }, // hier später wieder required einfügen
-    email: {
-      type: String,
-      set: function (input) {
-        return validator.escape(input);
-      },
-    }, // hier später wieder required einfügen und unique (und validator.isEmail)
-    password: {
-      type: String,
-      set: function (input) {
-        return validator.escape(input);
-      },
-    }, // hier später wieder required einfügen
+    }, // required machen?
     calendar: { type: mongoose.Schema.Types.ObjectId, ref: "Calendar" },
-    rememberMe: { type: Boolean },
   },
   { versionKey: false }
 );
 
-export const User = model("User", userSchema);
+export const Event = model("Event", eventSchema);

@@ -47,31 +47,6 @@ export const postUser = async (req, res, next) => {
   }
 };
 
-// export const createFirstCalendar = async (req, res, next) => {
-//   try {
-//     const { id } = req.body;
-
-//     const user = await User.findById(id);
-//     console.log("user", user);
-//     const userUpdate = {
-//       ...user,
-//       [calendars]: [
-//         {
-//           title: "My first calendar",
-//           user: id,
-//           events: [{ title: "First event", date: "2024-07-11" }],
-//         },
-//       ],
-//     };
-
-//     const updated = await User.findByIdAndUpdate(id, userUpdate, { new: true });
-//     console.log("updated", updated);
-//     next();
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
 export const setCookie = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -81,7 +56,7 @@ export const setCookie = async (req, res, next) => {
         .status(404)
         .json({ error: "No user with this email address found." });
     }
-    const token = await jwtSign(email, user._id);
+    const token = await jwtSign(email, user._id, user.username);
     if (!token) {
       return res
         .status(500)
