@@ -12,7 +12,6 @@ export const jwtSign = async (email, id) => {
 
 export const jwtVerify = async (token) => {
   return await jwt.verify(token, ACCESS_TOKEN_SECRET, (error, payload) => {
-    console.log("error & payload:", error, payload);
     if (error) {
       return error;
     } else {

@@ -1,11 +1,27 @@
 import mongoose from "mongoose";
+import validator from "validator";
 
 const { Schema, model } = mongoose;
 const userSchema = new Schema(
   {
-    username: { type: String }, // hier später wieder required einfügen
-    email: { type: String }, // hier später wieder required einfügen und unique
-    password: { type: String }, // hier später wieder required einfügen
+    username: {
+      type: String,
+      set: function (input) {
+        return validator.escape(input);
+      },
+    }, // hier später wieder required einfügen
+    email: {
+      type: String,
+      set: function (input) {
+        return validator.escape(input);
+      },
+    }, // hier später wieder required einfügen und unique (und validator.isEmail)
+    password: {
+      type: String,
+      set: function (input) {
+        return validator.escape(input);
+      },
+    }, // hier später wieder required einfügen
     calendars: { type: mongoose.Schema.Types.ObjectId, ref: "Calendars" },
     rememberMe: { type: Boolean },
   },
