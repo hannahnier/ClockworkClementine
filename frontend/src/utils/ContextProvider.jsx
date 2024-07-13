@@ -4,6 +4,9 @@ export const CalContext = createContext();
 
 const ContextProvider = ({ children }) => {
   const [calendars, setCalendars] = useState(["test"]);
+  const [events, setEvents] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [newEvent, setNewEvent] = useState({ title: "", date: null });
   const [users, setUsers] = useState([]);
   const [activeUser, setActiveUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
@@ -16,6 +19,8 @@ const ContextProvider = ({ children }) => {
       value={{
         calendars,
         setCalendars,
+        events,
+        setEvents,
         users,
         setUsers,
         activeUser,
@@ -25,6 +30,10 @@ const ContextProvider = ({ children }) => {
         firstVisit,
         setFirstVisit,
         baseUrl,
+        showPopup,
+        setShowPopup,
+        newEvent,
+        setNewEvent,
       }}
     >
       {children}
