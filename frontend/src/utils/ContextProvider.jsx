@@ -12,7 +12,7 @@ const ContextProvider = ({ children }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [firstVisit, setFirstVisit] = useState(false);
 
-  const baseUrl = "http://clockworkclementineserver.onrender.com"; // "http://localhost:3000"
+  const baseUrl = "https://clockworkclementineserver.onrender.com"; // "http://localhost:3000"
 
   return (
     <CalContext.Provider

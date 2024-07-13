@@ -18,7 +18,10 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(
-  cors({ origin: "http://clockworkclementine.onrender.com", credentials: true }) // http://localhost:5173
+  cors({
+    origin: "https://clockworkclementine.onrender.com",
+    credentials: true,
+  }) // http://localhost:5173
 );
 
 await connectToDb(DB_CONNECTION_STRING);
