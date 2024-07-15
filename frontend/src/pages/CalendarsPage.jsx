@@ -2,9 +2,10 @@
 // import dayGridPlugin from "@fullcalendar/daygrid";
 // import interactionPlugin from "@fullcalendar/interaction";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useCalContext } from "../utils/ContextProvider";
 import MyCalendar from "../components/Calendar";
+import Modal from "../components/Modal";
 
 const CalendarsPage = () => {
   const {
@@ -13,8 +14,9 @@ const CalendarsPage = () => {
     activeUser,
     setActiveUser,
     baseUrl,
-    events,
-    setEvents,
+    toggleUpdate,
+    showModal,
+    setCurrentCalendar,
   } = useCalContext();
 
   // const handleDateClick = () => {
@@ -29,22 +31,25 @@ const CalendarsPage = () => {
       const data = await rawData.json();
       setCalendars(data.calendars);
       setActiveUser(data.user);
+      setCurrentCalendar(data.calendars[0]);
     };
 
     fetchCalendars();
-  }, []);
+  }, [toggleUpdate]);
 
   return (
     <div>
       {activeUser?.username && <h2> {`Hi, ${activeUser.username}!`}</h2>}
-      <h3>My Calendars</h3>
-
-      {calendars && calendars.length > 0 && calendars[0].title}
-      {/* calendars[0] später durch map ersetzen */}
+      {showModal && <Modal />}
       {calendars &&
         calendars.length > 0 &&
         calendars.map((calendar, index) => (
-          <MyCalendar key={calendar._id || index} calendar={calendar} />
+          <div key={calendar._id || index}>
+            <h3>
+              Calendar {index + 1}: {calendar.title}
+            </h3>
+            <MyCalendar key={calendar._id} calendar={calendar} />
+          </div>
         ))}
     </div>
   );

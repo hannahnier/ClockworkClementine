@@ -3,7 +3,7 @@ import { useCalContext } from "../utils/ContextProvider";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { de } from "date-fns/locale";
 import { format, parse, startOfWeek, getDay } from "date-fns";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const locales = {
   de: de,
@@ -18,41 +18,25 @@ const localizer = dateFnsLocalizer({
 });
 
 const MyCalendar = ({ calendar }) => {
-  const { baseUrl, events, setEvents, errorMessage, setErrorMessage } =
-    useCalContext();
+  const {
+    errorMessage,
+    setShowModal,
+    currentEvent,
+    setCurrentEvent,
+    setModalType,
+  } = useCalContext();
 
-  const handleSelectSlot = ({ start, end }) => {
-    const title = window.prompt("New Event Name");
-    if (title) {
-      const createEvent = async () => {
-        const dataRaw = await fetch(
-          `${baseUrl}/api/calendars/${calendar._id}/events`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              start,
-              end,
-              title,
-            }),
-            credentials: "include",
-          }
-        );
-        const data = await dataRaw.json();
+  const [events, setEvents] = useState([]);
 
-        if (!data) {
-          setErrorMessage(data.error);
-        }
-        if (data) {
-          setEvents((prev) => [...prev, data]);
-        }
-        return data;
-      };
-      createEvent();
-    }
-  };
+  useEffect(() => {
+    setEvents(
+      calendar.events.map((event) => ({
+        ...event,
+        start: new Date(event.start),
+        end: new Date(event.end),
+      }))
+    );
+  }, [calendar.events]);
 
   //   const handleSelectEvent = useCallback(
   //     (event) => window.alert(event.title),
@@ -63,13 +47,32 @@ const MyCalendar = ({ calendar }) => {
     <div>
       {!errorMessage && (
         <Calendar
+          className="calendar"
           localizer={localizer}
           events={events}
           startAccessor="start"
           endAccessor="end"
-          // onSelectEvent={handleSelectEvent}
-          onSelectSlot={handleSelectSlot}
+          onSelectEvent={(event) => {
+            setModalType("update");
+            const eventSanitized = {
+              ...event,
+              start: format(event.start, "yyyy-MM-dd"),
+              end: format(event.end, "yyyy-MM-dd"),
+            };
+            setCurrentEvent(eventSanitized);
+            setShowModal(true);
+          }}
+          onSelectSlot={(event) => {
+            setCurrentEvent({
+              ...currentEvent,
+              ["start"]: format(event.slots[0], "yyyy-MM-dd"),
+              ["end"]: format(event.slots[0], "yyyy-MM-dd"),
+            });
+            setModalType("create");
+            setShowModal(true);
+          }}
           selectable
+          views={["month"]}
           style={{ height: 500, width: "500px" }}
         />
       )}

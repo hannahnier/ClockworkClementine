@@ -1,4 +1,5 @@
 import { Calendar } from "../models/calendarModel.js";
+import { Event } from "../models/eventModel.js";
 import { jwtVerify } from "../utils/jwt.js";
 
 export const postCalendar = async (req, res, next) => {
@@ -46,7 +47,7 @@ export const authenticateUser = async (req, res, next) => {
 export const getUserCalendars = async (req, res, next) => {
   try {
     const { id } = req.user;
-    const calendars = await Calendar.find({ user: id });
+    const calendars = await Calendar.find({ user: id }).populate("events");
     res.status(200).json({ calendars: calendars, user: req.user });
   } catch (err) {
     next(err);

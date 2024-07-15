@@ -7,7 +7,6 @@ export const getUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id).populate("calendars");
-    console.log(user);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -63,7 +62,7 @@ export const setCookie = async (req, res, next) => {
         .json({ error: "Access token could not be created." });
     }
     res.cookie("accessToken", token, {
-      maxAge: 1000 * 60 * 5,
+      maxAge: 1000 * 60 * 240,
       path: "/",
       httpOnly: true,
     });

@@ -4,8 +4,8 @@ import dotenv from "dotenv";
 dotenv.config();
 const { ACCESS_TOKEN_SECRET } = process.env;
 
-export const jwtSign = async (email, id) => {
-  return await jwt.sign({ email, id }, ACCESS_TOKEN_SECRET, {
+export const jwtSign = async (email, id, username) => {
+  return await jwt.sign({ email, id, username }, ACCESS_TOKEN_SECRET, {
     expiresIn: "120m",
   });
 };

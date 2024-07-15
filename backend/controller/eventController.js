@@ -1,7 +1,7 @@
 import { Event } from "../models/eventModel.js";
 import { Calendar } from "../models/calendarModel.js";
 
-export const postEvent = async (req, res, next) => {
+export const createEvent = async (req, res, next) => {
   try {
     let { calendarId } = req.params;
     let { start, end, title } = req.body;
@@ -11,9 +11,6 @@ export const postEvent = async (req, res, next) => {
           "Please specify a title and start/ending dates for the new event",
       });
     }
-    start = "2024-07-20T18:00:00.000Z";
-    end = "2024-07-20T20:00:00.000Z";
-    // new Date(2024, 6, 20, 18, 0, 0).toString()
     const newEvent = { start, end, title, calendar: calendarId };
     const created = await Event.create(newEvent);
     if (!created) {
@@ -23,27 +20,113 @@ export const postEvent = async (req, res, next) => {
     }
 
     const calendar = await Calendar.findById(calendarId);
-    console.log("calendar", calendar);
     if (!calendar) {
       return res.status(404).json({ error: "Calendar not found" });
     }
 
-    console.log("created ID", created._id);
+    const updatedEvents = calendar.events.concat(created._id);
 
-    calendar.events.push(created._id);
-    await calendar.save();
-
-    const populatedCalendar = await Calendar.findById(calendarId).populate(
-      "events"
+    const updatedCalendar = await Calendar.findByIdAndUpdate(
+      calendarId,
+      { events: updatedEvents },
+      { new: true }
     );
 
-    if (!populatedCalendar) {
+    if (!updatedCalendar) {
       return res
         .status(500)
         .json({ error: "Event could not be added to calendar" });
     }
 
-    res.status(201).json({ created });
+    const populatedCalendar = await Calendar.findById(calendarId).populate(
+      "events"
+    );
+
+    res.status(201).json(populatedCalendar);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateEvent = async (req, res, next) => {
+  try {
+    let { eventId } = req.params;
+    let { start, end, title, calendarId } = req.body;
+    if (!title || !start || !end) {
+      return res.status(400).json({
+        error:
+          "Please specify a title and start/ending dates for the new event",
+      });
+    }
+    const update = { start, end, title, calendar: calendarId };
+    const updatedEvent = await Event.findByIdAndUpdate(eventId, update, {
+      new: true,
+    });
+    if (!updatedEvent) {
+      return res
+        .status(500)
+        .json({ error: "Event could not be updated in database" });
+    }
+
+    const calendar = await Calendar.findById(calendarId);
+    if (!calendar) {
+      return res.status(404).json({ error: "Calendar not found" });
+    }
+
+    const populatedCalendar = await Calendar.findById(calendarId).populate(
+      "events"
+    );
+
+    res.status(201).json(populatedCalendar);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteEvent = async (req, res, next) => {
+  try {
+    let { eventId } = req.params;
+    if (!eventId) {
+      return res
+        .status(400)
+        .json({ error: "Please specify an event to delete" });
+    }
+    const deletedEvent = await Event.findByIdAndDelete(eventId);
+    if (!deletedEvent) {
+      return res
+        .status(500)
+        .json({ error: "Event could not be deleted due to a server error" });
+    }
+
+    const calendar = await Calendar.findOne({ events: eventId });
+
+    if (!calendar) {
+      return res.status(404).json({
+        error: "Calendar not found (event could not be deleted)",
+      });
+    }
+
+    const updatedEvents = calendar.events.filter(
+      (event) => event.toString() !== eventId.toString()
+    );
+
+    const updatedCalendar = await Calendar.findByIdAndUpdate(
+      calendar._id,
+      { events: updatedEvents },
+      { new: true }
+    );
+
+    if (!updatedCalendar) {
+      return res
+        .status(500)
+        .json({ error: "Event could not be removed from calendar" });
+    }
+
+    const populatedCalendar = await Calendar.findById(calendar._id).populate(
+      "events"
+    );
+
+    res.status(201).json(populatedCalendar);
   } catch (err) {
     next(err);
   }

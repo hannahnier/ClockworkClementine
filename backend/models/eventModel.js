@@ -6,16 +6,12 @@ const { Schema, model } = mongoose;
 const eventSchema = new Schema(
   {
     start: {
-      type: String,
-      set: function (input) {
-        return validator.escape(input);
-      }, // required machen?
+      type: Date,
+      // required machen?
     },
     end: {
-      type: String,
-      set: function (input) {
-        return validator.escape(input);
-      }, // required machen?
+      type: Date,
+      // required machen?
     },
     title: {
       type: String,
