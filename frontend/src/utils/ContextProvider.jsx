@@ -1,4 +1,3 @@
-import { set } from "mongoose";
 import { createContext, useState, useContext } from "react";
 
 export const CalContext = createContext();
@@ -13,6 +12,7 @@ const ContextProvider = ({ children }) => {
   const [toggleUpdate, setToggleUpdate] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [currentCalendar, setCurrentCalendar] = useState(null);
+  const [displayCalendars, setDisplayCalendars] = useState([]);
   const [modalType, setModalType] = useState("");
   const [currentEvent, setCurrentEvent] = useState({
     title: "",
@@ -51,6 +51,8 @@ const ContextProvider = ({ children }) => {
         setModalType,
         currentEvent,
         setCurrentEvent,
+        displayCalendars,
+        setDisplayCalendars,
       }}
     >
       {children}

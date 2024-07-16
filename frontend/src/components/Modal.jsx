@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCalContext } from "../utils/ContextProvider";
+import deleteIcon from "../assets/deleteIcon.svg";
 
 const Modal = () => {
   const {
@@ -95,11 +96,10 @@ const Modal = () => {
 
   return (
     <div className="modal">
-      {" "}
       <form className="modalInner" onSubmit={(e) => sendEventData(e)}>
         {currentEvent._id && (
           <button className="deleteButton" onClick={deleteEvent}>
-            Delete
+            <img src={deleteIcon} alt="Delete icon" />
           </button>
         )}
         <label htmlFor="title">Title of event: </label>
@@ -150,10 +150,11 @@ const Modal = () => {
           onChange={(e) => changeInput(e)}
           placeholder="15:00"
         />
-        <button type="submit">
+        
+        <button type="submit" className="standardButton submitButton">
           {modalType === "create" ? "Create" : "Update"}
         </button>
-        <button type="text" onClick={resetModal}>
+        <button type="text" className="standardButton" onClick={resetModal}>
           Close
         </button>
       </form>

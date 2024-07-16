@@ -65,6 +65,7 @@ const RegisterPage = () => {
           >
             <label htmlFor="username">Username: </label>
             <input
+              className="inputLogin"
               type="text"
               name="username"
               id="username"
@@ -76,6 +77,7 @@ const RegisterPage = () => {
 
             <label htmlFor="email">Email: </label>
             <input
+              className="inputLogin"
               type="text" // hier später wieder email
               name="email"
               id="email"
@@ -87,6 +89,7 @@ const RegisterPage = () => {
 
             <label htmlFor="password">Password: </label>
             <input
+              className="inputLogin"
               type="password"
               name="password"
               id="password"
@@ -99,12 +102,14 @@ const RegisterPage = () => {
               Remember me
             </label>
             <input
-              className="inputInline"
+              className="inputLogin inputInline"
               type="checkbox"
               id="rememberMe"
               name="rememberMe"
             />
-            <button type="submit">Sign up</button>
+            <button type="submit" className="standardButton submitButton">
+              Sign up
+            </button>
           </form>
           <p>
             Already have an account?{" "}
@@ -116,6 +121,7 @@ const RegisterPage = () => {
         <div>
           <p>{errorMessage}</p>
           <button
+            className="standardButton"
             onClick={() => {
               setErrorMessage(false);
               setInputData({ username: "", email: "", password: "" });
@@ -124,6 +130,7 @@ const RegisterPage = () => {
             Try again
           </button>
           <button
+            className="standardButton"
             onClick={() => {
               navigate("/");
             }}

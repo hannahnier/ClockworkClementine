@@ -59,6 +59,7 @@ const LoginPage = () => {
           >
             <label htmlFor="email">Email: </label>
             <input
+              className="inputLogin"
               type="text" // hier später wieder email
               name="email"
               id="email"
@@ -70,6 +71,7 @@ const LoginPage = () => {
 
             <label htmlFor="password">Password: </label>
             <input
+              className="inputLogin"
               type="password"
               name="password"
               id="password"
@@ -82,12 +84,14 @@ const LoginPage = () => {
               Remember me
             </label>
             <input
-              className="inputInline"
+              className="inputLogin inputInline"
               type="checkbox"
               id="rememberMe"
               name="rememberMe"
             />
-            <button type="submit">Log in</button>
+            <button type="submit" className="standardButton submitButton">
+              Log in
+            </button>
           </form>
           <p>
             Don&apos;t have an account yet?{" "}
@@ -99,6 +103,7 @@ const LoginPage = () => {
         <div>
           <p>{errorMessage}</p>
           <button
+            className="standardButton"
             onClick={() => {
               setErrorMessage(false);
               setInputData({ username: "", email: "", password: "" });
@@ -107,6 +112,7 @@ const LoginPage = () => {
             Try again
           </button>
           <button
+            className="standardButton"
             onClick={() => {
               navigate("/");
             }}

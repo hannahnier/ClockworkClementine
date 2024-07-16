@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useCalContext } from "../utils/ContextProvider";
 import MyCalendar from "../components/Calendar";
 import Modal from "../components/Modal";
+import CalOverview from "../components/CalOverview";
 
 const CalendarsPage = () => {
   const {
@@ -17,11 +18,8 @@ const CalendarsPage = () => {
     toggleUpdate,
     showModal,
     setCurrentCalendar,
+    displayCalendars,
   } = useCalContext();
-
-  // const handleDateClick = () => {
-  //   setShowPopup(true);
-  // };
 
   useEffect(() => {
     const fetchCalendars = async () => {
@@ -41,9 +39,12 @@ const CalendarsPage = () => {
     <div>
       {activeUser?.username && <h2> {`Hi, ${activeUser.username}!`}</h2>}
       {showModal && <Modal />}
-      {calendars &&
-        calendars.length > 0 &&
-        calendars.map((calendar, index) => (
+
+      <CalOverview />
+
+      {displayCalendars &&
+        displayCalendars.length > 0 &&
+        displayCalendars.map((calendar, index) => (
           <div key={calendar._id || index}>
             <h3>
               Calendar {index + 1}: {calendar.title}
@@ -51,6 +52,7 @@ const CalendarsPage = () => {
             <MyCalendar key={calendar._id} calendar={calendar} />
           </div>
         ))}
+      {displayCalendars.length === 0 && <h4>No calendars selected</h4>}
     </div>
   );
 };

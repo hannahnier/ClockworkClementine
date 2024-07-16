@@ -12,6 +12,8 @@ const Header = () => {
     activeUser,
     setActiveUser,
     baseUrl,
+    displayCalendars,
+    setDisplayCalendars,
   } = useCalContext();
 
   const logoutUser = async () => {
@@ -21,6 +23,7 @@ const Header = () => {
     });
     const data = await res.json();
     setActiveUser(data?.user);
+    setDisplayCalendars([]);
     navigate("/");
   };
 

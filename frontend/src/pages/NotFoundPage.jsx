@@ -7,7 +7,9 @@ const NotFoundPage = () => {
     <div>
       <h1>404</h1>
       <h2>The page you were looking for does not exist.</h2>
-      <button onClick={() => navigate("/")}>Back to Main Page</button>
+      <button className="standardButton" onClick={() => navigate("/")}>
+        Back to Main Page
+      </button>
     </div>
   );
 };

@@ -22,7 +22,9 @@ const LandingPage = () => {
       </div>
       {!activeUser && (
         <button
-          className={`startButton ${firstVisit ? "transition" : ""}`}
+          className={`startButton standardButton ${
+            firstVisit ? "transition" : ""
+          }`}
           onClick={() => navigate("/login")}
         >
           Login
@@ -30,7 +32,9 @@ const LandingPage = () => {
       )}
       {!activeUser && (
         <button
-          className={`startButton ${firstVisit ? "transition" : ""}`}
+          className={`startButton standardButton ${
+            firstVisit ? "transition" : ""
+          }`}
           onClick={() => navigate("/register")}
         >
           Sign up
@@ -39,7 +43,7 @@ const LandingPage = () => {
 
       {activeUser && (
         <button
-          className={`startButton ${firstVisit ? "transition" : ""}`}
+          className={`startButton standardButton ${firstVisit ? "transition" : ""}`}
           onClick={() => navigate("/calendars")}
         >
           My Calendars
