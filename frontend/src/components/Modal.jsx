@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useCalContext } from "../utils/ContextProvider";
 import deleteIcon from "../assets/deleteIcon.svg";
 
@@ -13,9 +12,7 @@ const Modal = () => {
     setCurrentCalendar,
     currentEvent,
     setCurrentEvent,
-    showModal,
     modalType,
-    setModalType,
   } = useCalContext();
 
   const changeInput = (e) => {
@@ -70,6 +67,7 @@ const Modal = () => {
       if (!data) {
         setErrorMessage(data.error);
       }
+      setCurrentCalendar(data);
 
       setToggleUpdate((prev) => !prev);
       return data;
@@ -98,11 +96,14 @@ const Modal = () => {
     <div className="modal">
       <form className="modalInner" onSubmit={(e) => sendEventData(e)}>
         {currentEvent._id && (
-          <button className="deleteButton" onClick={deleteEvent}>
+          <button className="editButton" onClick={deleteEvent}>
             <img src={deleteIcon} alt="Delete icon" />
           </button>
         )}
-        <label htmlFor="title">Title of event: </label>
+        <h3>{modalType === "create" ? "New event" : "Edit event"}</h3>
+        <label htmlFor="title" className="labelBold">
+          Title{" "}
+        </label>
         <input
           type="text"
           value={currentEvent.title}
@@ -112,7 +113,9 @@ const Modal = () => {
           required
           placeholder="Meeting with..."
         />
-        <label htmlFor="start">Start of event: </label>
+        <label htmlFor="start" className="labelBold">
+          Start{" "}
+        </label>
         <input
           type="date"
           name="start"
@@ -121,17 +124,24 @@ const Modal = () => {
           onChange={(e) => changeInput(e)}
           required
         />
-        <label htmlFor="startTime">(optional) Time: </label>
+        <label
+          htmlFor="startTime"
+          className={currentEvent.startTime ? "labelBold" : ""}
+        >
+          Time (optional)
+        </label>
         <input
           type="text"
           pattern="(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]"
           placeholder="13:00"
-          value={currentEvent.startTime}
-          onChange={(e) => changeInput(e)}
           name="startTime"
           id="startTime"
+          value={currentEvent.startTime}
+          onChange={(e) => changeInput(e)}
         />
-        <label htmlFor="end">End of event: </label>
+        <label htmlFor="end" className="labelBold">
+          End{" "}
+        </label>
         <input
           type="date"
           name="end"
@@ -140,17 +150,22 @@ const Modal = () => {
           onChange={(e) => changeInput(e)}
           required
         />
-        <label htmlFor="endTime">(optional) Time: </label>
+        <label
+          htmlFor="endTime"
+          className={currentEvent.endTime ? "labelBold" : ""}
+        >
+          Time (optional){" "}
+        </label>
         <input
           type="text"
           pattern="(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]"
+          placeholder="15:00"
           name="endTime"
           id="endTime"
           value={currentEvent.endTime}
           onChange={(e) => changeInput(e)}
-          placeholder="15:00"
         />
-        
+
         <button type="submit" className="standardButton submitButton">
           {modalType === "create" ? "Create" : "Update"}
         </button>

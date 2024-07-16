@@ -29,16 +29,7 @@ const Header = () => {
 
   return (
     <header>
-      {activeUser && (
-        <ul>
-          <li>
-            <Link>New calendar</Link>
-          </li>
-          <li>
-            <Link>Delete calendar</Link>
-          </li>
-        </ul>
-      )}
+      {activeUser?.username && <h2> {`Hi, ${activeUser.username}!`}</h2>}
       {activeUser && (
         <Link className="logoutLink" onClick={logoutUser}>
           <img src={logoutSign} alt="Logout logo" />

@@ -32,6 +32,7 @@ export const postUser = async (req, res, next) => {
       username,
       email,
       password: hashed,
+      calendars: [],
     };
     const created = await User.create(newUser);
     if (!created) {

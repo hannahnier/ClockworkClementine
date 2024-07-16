@@ -4,21 +4,19 @@
 
 import { useEffect } from "react";
 import { useCalContext } from "../utils/ContextProvider";
-import MyCalendar from "../components/Calendar";
+import MyCalendar from "../components/MyCalendar";
 import Modal from "../components/Modal";
 import CalOverview from "../components/CalOverview";
 
 const CalendarsPage = () => {
   const {
-    calendars,
     setCalendars,
     activeUser,
     setActiveUser,
     baseUrl,
     toggleUpdate,
     showModal,
-    setCurrentCalendar,
-    displayCalendars,
+    currentCalendar,
   } = useCalContext();
 
   useEffect(() => {
@@ -27,9 +25,8 @@ const CalendarsPage = () => {
         credentials: "include",
       });
       const data = await rawData.json();
-      setCalendars(data.calendars);
-      setActiveUser(data.user);
-      setCurrentCalendar(data.calendars[0]);
+      setCalendars(data.calendars || []);
+      setActiveUser(data.user || {});
     };
 
     fetchCalendars();
@@ -37,22 +34,17 @@ const CalendarsPage = () => {
 
   return (
     <div>
-      {activeUser?.username && <h2> {`Hi, ${activeUser.username}!`}</h2>}
       {showModal && <Modal />}
 
       <CalOverview />
 
-      {displayCalendars &&
-        displayCalendars.length > 0 &&
-        displayCalendars.map((calendar, index) => (
-          <div key={calendar._id || index}>
-            <h3>
-              Calendar {index + 1}: {calendar.title}
-            </h3>
-            <MyCalendar key={calendar._id} calendar={calendar} />
-          </div>
-        ))}
-      {displayCalendars.length === 0 && <h4>No calendars selected</h4>}
+      {currentCalendar && currentCalendar.events ? (
+        <div>
+          <MyCalendar calendar={currentCalendar} />
+        </div>
+      ) : (
+        <h4>No calendar selected</h4>
+      )}
     </div>
   );
 };

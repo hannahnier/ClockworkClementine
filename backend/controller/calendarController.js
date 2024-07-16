@@ -44,7 +44,7 @@ export const postCalendar = async (req, res, next) => {
 
     const populatedUser = await User.findById(user).populate("calendars");
 
-    res.status(201).json(populatedUser);
+    res.status(201).json(created);
   } catch (err) {
     next(err);
   }
@@ -81,9 +81,32 @@ export const getUserCalendars = async (req, res, next) => {
   }
 };
 
+export const updateCalendar = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { title } = req.body;
+
+    const updatedCalendar = await Calendar.findByIdAndUpdate(
+      id,
+      { title },
+      { new: true }
+    );
+    if (!updatedCalendar) {
+      res
+        .status(404)
+        .json({ error: "Calendar not found or could not be updated" });
+    }
+    res.status(201).json(updatedCalendar);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const deleteCalendar = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    // Delete calendar:
     const deletedCalendar = await Calendar.findByIdAndDelete(id);
     if (!deletedCalendar) {
       res
@@ -91,31 +114,35 @@ export const deleteCalendar = async (req, res, next) => {
         .json({ error: "Calendar not found or could not be deleted" });
     }
 
-    const user = await User.findOne({ calendars: id });
+    // Delete events:
+    const deletedEvents = await Event.deleteMany({ calendar: id });
+    if (!deletedEvents) {
+      return res
+        .status(404)
+        .json({ error: "Events not found or could not be deleted" });
+    }
 
+    // Update user:
+    const user = await User.findOne({ calendars: id });
     if (!user) {
       return res.status(404).json({
         error:
           "User not found (calendar could not be deleted from user's profile)",
       });
     }
-
-    const updatedCalendars = User.calendars.filter(
+    const updatedCalendars = user.calendars.filter(
       (calendar) => calendar.toString() !== id.toString()
     );
-
     const updatedUser = await User.findByIdAndUpdate(
       user._id,
       { calendars: updatedCalendars },
       { new: true }
     );
-
     if (!updatedUser) {
       return res
         .status(500)
         .json({ error: "Calendar could not be removed from user" });
     }
-
     const populatedUser = await User.findById(user._id).populate("calendars");
 
     res.status(201).json(populatedUser);

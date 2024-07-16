@@ -38,13 +38,30 @@ const MyCalendar = ({ calendar }) => {
     );
   }, [calendar.events]);
 
-  //   const handleSelectEvent = useCallback(
-  //     (event) => window.alert(event.title),
-  //     []
-  //   );
+  const handleClickOnEvent = (event) => {
+    setModalType("update");
+    const eventSanitized = {
+      ...event,
+      start: format(event.start, "yyyy-MM-dd"),
+      end: format(event.end, "yyyy-MM-dd"),
+    };
+    setCurrentEvent(eventSanitized);
+    setShowModal(true);
+  };
+
+  const handleClickOnDate = (event) => {
+    setCurrentEvent({
+      ...currentEvent,
+      ["start"]: format(event.slots[0], "yyyy-MM-dd"),
+      ["end"]: format(event.slots[0], "yyyy-MM-dd"),
+    });
+    setModalType("create");
+    setShowModal(true);
+  };
 
   return (
-    <div>
+    <div className="calendarBox">
+      <p>{calendar.title}</p>
       {!errorMessage && (
         <Calendar
           className="calendar"
@@ -53,23 +70,10 @@ const MyCalendar = ({ calendar }) => {
           startAccessor="start"
           endAccessor="end"
           onSelectEvent={(event) => {
-            setModalType("update");
-            const eventSanitized = {
-              ...event,
-              start: format(event.start, "yyyy-MM-dd"),
-              end: format(event.end, "yyyy-MM-dd"),
-            };
-            setCurrentEvent(eventSanitized);
-            setShowModal(true);
+            handleClickOnEvent(event);
           }}
           onSelectSlot={(event) => {
-            setCurrentEvent({
-              ...currentEvent,
-              ["start"]: format(event.slots[0], "yyyy-MM-dd"),
-              ["end"]: format(event.slots[0], "yyyy-MM-dd"),
-            });
-            setModalType("create");
-            setShowModal(true);
+            handleClickOnDate(event);
           }}
           selectable
           views={["month"]}

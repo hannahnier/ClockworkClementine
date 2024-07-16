@@ -22,7 +22,7 @@ const userSchema = new Schema(
         return validator.escape(input);
       },
     }, // hier später wieder required einfügen
-    calendar: { type: mongoose.Schema.Types.ObjectId, ref: "Calendar" },
+    calendars: [{ type: mongoose.Schema.Types.ObjectId, ref: "Calendar" }],
     rememberMe: { type: Boolean },
   },
   { versionKey: false }
