@@ -17,6 +17,7 @@ const CalendarsPage = () => {
     toggleUpdate,
     showModal,
     currentCalendar,
+    setCurrentCalendar,
   } = useCalContext();
 
   useEffect(() => {
@@ -27,6 +28,9 @@ const CalendarsPage = () => {
       const data = await rawData.json();
       setCalendars(data.calendars || []);
       setActiveUser(data.user || {});
+      if (!currentCalendar) {
+        setCurrentCalendar(data.calendars[0] || null);
+      }
     };
 
     fetchCalendars();

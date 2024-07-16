@@ -11,9 +11,10 @@ const ContextProvider = ({ children }) => {
   const [firstVisit, setFirstVisit] = useState(false);
   const [toggleUpdate, setToggleUpdate] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(true);
   const [currentCalendar, setCurrentCalendar] = useState(null);
   const [displayCalendars, setDisplayCalendars] = useState([]);
-  const [modalType, setModalType] = useState("");
   const [currentEvent, setCurrentEvent] = useState({
     title: "",
     start: "",
@@ -45,6 +46,8 @@ const ContextProvider = ({ children }) => {
         setToggleUpdate,
         showModal,
         setShowModal,
+        showConfirmation,
+        setShowConfirmation,
         currentCalendar,
         setCurrentCalendar,
         modalType,

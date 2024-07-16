@@ -5,6 +5,7 @@ import createIcon from "../assets/plus.svg";
 import editIcon from "../assets/editIcon.svg";
 import checkIcon from "../assets/checkIcon.svg";
 import { useNavigate } from "react-router-dom";
+import Confirmation from "./Confirmation";
 
 const CalOverview = () => {
   const {
@@ -15,16 +16,19 @@ const CalOverview = () => {
     setToggleUpdate,
     currentCalendar,
     setCalendars,
+    showConfirmation,
+    setShowConfirmation,
   } = useCalContext();
 
   const navigate = useNavigate();
 
-  const [titleInput, setTitleInput] = useState("New Calendar");
+  const [titleInput, setTitleInput] = useState("");
   const [editThisTitle, setEditThisTitle] = useState(null);
   const [titleUpdate, setTitleUpdate] = useState("");
 
-  // Update the displayed calendar according to user selection:
+  // Update the displayed calendar according to user's selection:
   const handleCalendarSelection = (e, calendar) => {
+    // If the calendar is already selected, unselect it:
     setCurrentCalendar((prev) =>
       prev && prev._id === calendar._id ? null : calendar
     );
@@ -32,6 +36,7 @@ const CalOverview = () => {
 
   // Edit the title of a calendar:
   const handleTitleEdit = async (calendar) => {
+    //  When editing ends: Update the calendar title:
     if (editThisTitle) {
       const res = await fetch(`${baseUrl}/calendars/${calendar._id}`, {
         method: "PATCH",
@@ -40,33 +45,27 @@ const CalOverview = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title: titleUpdate,
+          title: titleUpdate || calendar.title,
         }),
       });
       const data = await res.json();
+      console.log("data", data);
       setCurrentCalendar(data);
       setEditThisTitle(null);
       setTitleUpdate("");
       setToggleUpdate((prev) => !prev);
-    } else
+      // When editing starts: Set the calendar to be edited:
+    } else {
       setEditThisTitle((prev) =>
         prev && prev._id === calendar._id ? {} : calendar
       );
+    }
   };
 
-  // Delete a calendar:
-  const deleteCalendar = async (cal) => {
-    const res = await fetch(`${baseUrl}/calendars/${cal._id}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-    const data = await res.json();
-
-    if (currentCalendar && currentCalendar._id === cal._id) {
-      setCurrentCalendar(null);
-    }
-    setCalendars(data.calendars);
-    setToggleUpdate((prev) => !prev);
+  // Ask for confirmation before deleting a calendar:
+  const handleDeleteCalendar = (calendar) => {
+    setCurrentCalendar(calendar);
+    setShowConfirmation(true);
   };
 
   // Create a new calendar:
@@ -78,14 +77,14 @@ const CalOverview = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        title: titleInput || "New Calendar",
+        title: titleInput || "Untitled Calendar",
         events: [],
         user: activeUser.id,
       }),
     });
     const data = await res.json();
     setCurrentCalendar(data);
-    setTitleInput("New Calendar");
+    setTitleInput("");
     setToggleUpdate((prev) => !prev);
   };
 
@@ -100,12 +99,13 @@ const CalOverview = () => {
               id="titleInput"
               value={titleInput || ""}
               onChange={(e) => setTitleInput(e.target.value)}
+              placeholder="My New Calendar"
             />
             <button
               onClick={createCalendar}
               className="editButton editButtonSmall"
             >
-              <img src={createIcon} alt="create icon" />
+              <img src={createIcon} alt="icon for create" />
             </button>
           </div>
           {calendars &&
@@ -124,10 +124,12 @@ const CalOverview = () => {
                   style={{ cursor: "pointer" }}
                 />
 
+                {/* Show text label OR (when editing) input for calendar title: */}
                 {editThisTitle && editThisTitle._id === calendar._id ? (
                   <input
                     type="text"
-                    value={titleUpdate || calendar.title}
+                    placeholder={calendar.title}
+                    value={titleUpdate || ""}
                     onChange={(e) => setTitleUpdate(e.target.value)}
                   />
                 ) : (
@@ -154,7 +156,7 @@ const CalOverview = () => {
                     src={deleteIcon}
                     alt="delete icon"
                     onClick={() => {
-                      deleteCalendar(calendar);
+                      handleDeleteCalendar(calendar);
                     }}
                   />{" "}
                 </button>
@@ -162,6 +164,7 @@ const CalOverview = () => {
             ))}
         </div>
       )}
+      {showConfirmation && <Confirmation />}
       {!activeUser && (
         <div>
           <p>Please log in to see your calendars</p>
