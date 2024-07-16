@@ -3,6 +3,7 @@ import { createContext, useState, useContext } from "react";
 export const CalContext = createContext();
 
 const ContextProvider = ({ children }) => {
+  const [showCookieBox, setShowCookieBox] = useState(true);
   const [calendars, setCalendars] = useState([]);
   const [events, setEvents] = useState([]);
   const [users, setUsers] = useState([]);
@@ -12,7 +13,7 @@ const ContextProvider = ({ children }) => {
   const [toggleUpdate, setToggleUpdate] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
-  const [showConfirmation, setShowConfirmation] = useState(true);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [currentCalendar, setCurrentCalendar] = useState(null);
   const [displayCalendars, setDisplayCalendars] = useState([]);
   const [currentEvent, setCurrentEvent] = useState({
@@ -29,6 +30,8 @@ const ContextProvider = ({ children }) => {
   return (
     <CalContext.Provider
       value={{
+        showCookieBox,
+        setShowCookieBox,
         calendars,
         setCalendars,
         events,

@@ -49,7 +49,6 @@ const CalOverview = () => {
         }),
       });
       const data = await res.json();
-      console.log("data", data);
       setCurrentCalendar(data);
       setEditThisTitle(null);
       setTitleUpdate("");
@@ -99,7 +98,7 @@ const CalOverview = () => {
               id="titleInput"
               value={titleInput || ""}
               onChange={(e) => setTitleInput(e.target.value)}
-              placeholder="My New Calendar"
+              placeholder="Enter a title"
             />
             <button
               onClick={createCalendar}

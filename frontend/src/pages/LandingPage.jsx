@@ -4,7 +4,8 @@ import { useCalContext } from "../utils/ContextProvider";
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const { activeUser, firstVisit, setFirstVisit } = useCalContext();
+  const { activeUser, firstVisit, setFirstVisit, showCookieBox } =
+    useCalContext();
 
   useEffect(() => {
     const timer = setTimeout(() => setFirstVisit(true), 100);
@@ -14,16 +15,28 @@ const LandingPage = () => {
   return (
     <div className="landingContainer">
       <h1>Clockwork Clementine</h1>
-      <div className={`clementine ${firstVisit ? "transition" : ""}`}>
+      <div
+        className={`clementine ${
+          firstVisit && !showCookieBox ? "transition" : ""
+        }`}
+      >
         <div className="leaf1"></div>
         <div className="leaf2"></div>
-        <div className={`clockHand1 ${firstVisit ? "transition" : ""}`}></div>
-        <div className={`clockHand2 ${firstVisit ? "transition" : ""}`}></div>
+        <div
+          className={`clockHand1 ${
+            firstVisit && !showCookieBox ? "transition" : ""
+          }`}
+        ></div>
+        <div
+          className={`clockHand2 ${
+            firstVisit && !showCookieBox ? "transition" : ""
+          }`}
+        ></div>
       </div>
       {!activeUser && (
         <button
           className={`startButton standardButton ${
-            firstVisit ? "transition" : ""
+            firstVisit && !showCookieBox ? "transition" : ""
           }`}
           onClick={() => navigate("/login")}
         >
@@ -33,7 +46,7 @@ const LandingPage = () => {
       {!activeUser && (
         <button
           className={`startButton standardButton ${
-            firstVisit ? "transition" : ""
+            firstVisit && !showCookieBox ? "transition" : ""
           }`}
           onClick={() => navigate("/register")}
         >
@@ -43,7 +56,9 @@ const LandingPage = () => {
 
       {activeUser && (
         <button
-          className={`startButton standardButton ${firstVisit ? "transition" : ""}`}
+          className={`startButton standardButton ${
+            firstVisit && !showCookieBox ? "transition" : ""
+          }`}
           onClick={() => navigate("/calendars")}
         >
           My Calendars
