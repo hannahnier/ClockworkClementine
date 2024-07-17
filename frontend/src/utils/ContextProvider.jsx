@@ -3,7 +3,7 @@ import { createContext, useState, useContext } from "react";
 export const CalContext = createContext();
 
 const ContextProvider = ({ children }) => {
-  const [showCookieBox, setShowCookieBox] = useState(true);
+  const [showCookieBox, setShowCookieBox] = useState(false);
   const [calendars, setCalendars] = useState([]);
   const [events, setEvents] = useState([]);
   const [users, setUsers] = useState([]);

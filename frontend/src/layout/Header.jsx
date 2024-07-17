@@ -30,7 +30,7 @@ const Header = () => {
   return (
     <header>
       {activeUser?.username && <h2> {`Hi, ${activeUser.username}!`}</h2>}
-      {activeUser && (
+      {activeUser?.username && (
         <Link className="logoutLink" onClick={logoutUser}>
           <img src={logoutSign} alt="Logout logo" />
         </Link>

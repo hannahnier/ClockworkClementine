@@ -1,12 +1,8 @@
-// import FullCalendar from "@fullcalendar/react";
-// import dayGridPlugin from "@fullcalendar/daygrid";
-// import interactionPlugin from "@fullcalendar/interaction";
-
 import { useEffect } from "react";
 import { useCalContext } from "../utils/ContextProvider";
 import MyCalendar from "../components/MyCalendar";
 import Modal from "../components/Modal";
-import CalOverview from "../components/CalOverview";
+import CalControls from "../components/CalControls";
 
 const CalendarsPage = () => {
   const {
@@ -33,22 +29,24 @@ const CalendarsPage = () => {
       }
     };
 
-    fetchCalendars();
+    if (activeUser?.username) {
+      fetchCalendars();
+    }
   }, [toggleUpdate]);
 
   return (
     <div>
       {showModal && <Modal />}
 
-      <CalOverview />
+      <CalControls />
 
       {currentCalendar && currentCalendar.events ? (
         <div>
           <MyCalendar calendar={currentCalendar} />
         </div>
-      ) : (
+      ) : activeUser?.username ? (
         <h4>No calendar selected</h4>
-      )}
+      ) : null}
     </div>
   );
 };

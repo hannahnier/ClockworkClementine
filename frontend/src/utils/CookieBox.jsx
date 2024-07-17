@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useCalContext } from "./ContextProvider";
 
 const CookieBox = () => {
   const { showCookieBox, setShowCookieBox } = useCalContext();
 
-  //   Store the user's consent in localStorage:
+  //   Check if the user has already given consent:
   useEffect(() => {
     const consent = localStorage.getItem("cookieConsent");
     if (!consent) {
@@ -12,28 +12,33 @@ const CookieBox = () => {
     }
   }, []);
 
+  // Store the user's consent in localStorage:
   const handleAccept = () => {
     localStorage.setItem("cookieConsent", "true");
     setShowCookieBox(false);
   };
 
+  //  If the user has already given consent, don't show the cookie box:
   if (!showCookieBox) {
     return null;
   }
 
-  return (
-    <div className="cookieOuter">
-      <div className="cookie">
-        <p>
-          This website uses cookies for registration and login. Please give your
-          permission or it won't work.
-        </p>
-        <button className="standardButton" onClick={handleAccept}>
-          Allow
-        </button>
+  //  If the user hasn't given consent, show the cookie box:
+  if (showCookieBox) {
+    return (
+      <div className="cookieOuter">
+        <div className="cookie">
+          <p>
+            This website uses cookies for registration and login. Please give
+            your permission or else it will not work.
+          </p>
+          <button className="standardButton" onClick={handleAccept}>
+            Allow
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default CookieBox;

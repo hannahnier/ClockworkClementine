@@ -7,7 +7,7 @@ import checkIcon from "../assets/checkIcon.svg";
 import { useNavigate } from "react-router-dom";
 import Confirmation from "./Confirmation";
 
-const CalOverview = () => {
+const CalControls = () => {
   const {
     calendars = [],
     setCurrentCalendar,
@@ -89,8 +89,8 @@ const CalOverview = () => {
 
   return (
     <div className="container">
-      {activeUser && (
-        <div className="calOverview">
+      {activeUser?.username && (
+        <div className="calControls">
           <div className="titleBox">
             <input
               className="newTitleInput"
@@ -123,16 +123,21 @@ const CalOverview = () => {
                   style={{ cursor: "pointer" }}
                 />
 
-                {/* Show text label OR (when editing) input for calendar title: */}
+                {/* Show text label OR (if editing) input for calendar title: */}
                 {editThisTitle && editThisTitle._id === calendar._id ? (
                   <input
+                    className="titleListItem"
                     type="text"
                     placeholder={calendar.title}
                     value={titleUpdate || ""}
                     onChange={(e) => setTitleUpdate(e.target.value)}
                   />
                 ) : (
-                  <label htmlFor={calendar._id} style={{ cursor: "pointer" }}>
+                  <label
+                    className="titleListItem"
+                    htmlFor={calendar._id}
+                    style={{ cursor: "pointer" }}
+                  >
                     {calendar.title}
                   </label>
                 )}
@@ -164,7 +169,7 @@ const CalOverview = () => {
         </div>
       )}
       {showConfirmation && <Confirmation />}
-      {!activeUser && (
+      {!activeUser?.username && (
         <div>
           <p>Please log in to see your calendars</p>
           <button className="standardButton" onClick={() => navigate("/login")}>
@@ -176,4 +181,4 @@ const CalOverview = () => {
   );
 };
 
-export default CalOverview;
+export default CalControls;
