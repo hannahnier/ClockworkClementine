@@ -2,13 +2,12 @@
 
 :root {
   --color1: #ff7f3e;
-  --color2: #fff6e9;
-  --color3: #80c4e9;
-  --color4: #604cc3;
-  --darkFont: #021b29;
+  --color2: #fbf3e4;
+  --color3: #dfd8ca;
+  --color4: #05c79d;
 
   background-color: var(--color2);
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Inter, system-ui, Helvetica, Arial, sans-serif;
   line-height: 1.5;
 }
 
@@ -22,7 +21,7 @@ body {
 .standardButton {
   margin: 0.5em;
   min-width: 120px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid transparent;
   padding: 0.4em 1.2em;
   font-size: 1em;
@@ -37,6 +36,11 @@ body {
   color: var(--color2);
 }
 
+.coloredButton {
+  background-color: var(--color1);
+  color: var(--color2);
+}
+
 button:hover {
   transform: scale(1.05);
 }
@@ -46,9 +50,16 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-input {
+input,
+select {
   padding: 0.2em;
-  margin-bottom: 0.5em;
+  margin: 0.5em 0;
+  width: 130px;
+}
+
+input:focus {
+  outline: none;
+  border: 3px solid var(--color1);
 }
 
 label {
@@ -105,7 +116,7 @@ header {
   position: relative;
   height: 200px;
   width: 200px;
-  background-color: var(--color1);
+  background-color: #ff7f3e;
   border-radius: 50%;
   z-index: 1;
   margin: 50px;
@@ -119,7 +130,7 @@ header {
   position: absolute;
   width: 60px;
   height: 30px;
-  background-color: green;
+  background-color: var(--color4);
   border-radius: 50% 50% 20% 70%;
   transform: rotate(-30deg);
   top: -25px;
@@ -130,7 +141,7 @@ header {
   position: absolute;
   width: 60px;
   height: 30px;
-  background-color: green;
+  background-color: var(--color4);
   border-radius: 70% 20% 50% 50%;
   top: -25px;
   left: 50px;
@@ -183,6 +194,11 @@ header {
   color: white;
 }
 
+.coloredButton.transition {
+  background-color: var(--color1);
+  color: white;
+}
+
 /* Register & Login Page: */
 
 form {
@@ -190,14 +206,30 @@ form {
   flex-direction: column;
 }
 
+.passwordBox {
+  position: relative;
+  width: 100%;
+}
+
 .inputLogin {
   display: block;
   margin-bottom: 1em;
   height: 1.5em;
+  width: 100%;
 }
 
 input.inputInline {
   display: inline;
+}
+
+.eyeIcon {
+  display: inline;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 10px;
 }
 
 /* Calendars Page: */
@@ -206,10 +238,18 @@ input.inputInline {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 2px solid var(--color1);
-  background-color: var(--color3);
+  border: 5px solid var(--color1);
   padding: 0.5em;
+  margin-bottom: 30px;
   border-radius: 1em;
+}
+
+.calColorBox {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border-radius: 5px;
+  margin-left: 5px;
 }
 
 .titleBox {
@@ -220,7 +260,7 @@ input.inputInline {
 
 .titleListItem {
   display: inline-block;
-  min-width: 180px;
+  min-width: 150px;
 }
 
 .calendarBox {
@@ -236,6 +276,11 @@ input.inputInline {
   display: inline;
   width: 180px;
   margin: 10px;
+  border: 2px solid var(--color4);
+}
+
+.newTitleInput:focus {
+  border: 3px solid var(--color4);
 }
 
 .editButton {
@@ -245,18 +290,23 @@ input.inputInline {
   border-radius: 8px;
   padding: 0.5em;
   cursor: pointer;
+  border: none;
 }
 
 .editButtonSmall {
-  width: 30px;
-  height: 30px;
-  margin: 0.5em;
+  width: 2em;
+  height: 2em;
+  margin: 0.4em;
   padding: 0.4em;
 }
 
 .editButton img {
   width: 100%;
   height: 100%;
+}
+
+.createButton {
+  background-color: var(--color4);
 }
 
 /* Modal: */
@@ -272,22 +322,37 @@ input.inputInline {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(5, 18, 56, 0.5);
+  background-color: rgba(29, 34, 33, 0.5);
 }
 
 .modalInner {
-  background-color: var(--color1);
+  background-color: var(--color4);
   color: black;
-  padding: 30px;
+  padding: 50px;
+  min-width: 200px;
   border-radius: 1em;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
+}
+
+.coloredModal {
+  background-color: var(--color2);
+  border: 5px solid var(--color1);
+}
+
+.inputFields {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .modal .labelBold {
   font-weight: bold;
+  margin-right: 1em;
 }
 
 /* Cookie Box */
@@ -321,4 +386,13 @@ input.inputInline {
 .cookie button {
   background-color: var(--color4);
   color: white;
+}
+
+/* Styles from react big calendar library: */
+
+.rbc-day-bg,
+.rbc-row-segment,
+.rbc-row,
+.rbc-off-range-bg {
+  cursor: pointer;
 }

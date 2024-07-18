@@ -3,19 +3,12 @@ import logoutSign from "../assets/logout.svg";
 import { useCalContext } from "../utils/ContextProvider";
 
 const Header = () => {
+  // Get states from context:
+  const { activeUser, setActiveUser, baseUrl, setDisplayCalendars } =
+    useCalContext();
   const navigate = useNavigate();
-  const {
-    calendars,
-    setCalendars,
-    users,
-    setUsers,
-    activeUser,
-    setActiveUser,
-    baseUrl,
-    displayCalendars,
-    setDisplayCalendars,
-  } = useCalContext();
 
+  // Handle user logout by sending a request to the server, updating states and navigating back:
   const logoutUser = async () => {
     const res = await fetch(`${baseUrl}/users/logout`, {
       method: "POST",

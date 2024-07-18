@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import { User } from "../models/userModel.js";
 import { jwtSign } from "../utils/jwt.js";
 
+/////////////////////// Get a user: ///////////////////////
+
 export const getUser = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -16,6 +18,8 @@ export const getUser = async (req, res, next) => {
   }
 };
 
+/////////////////////// Create a new user: ///////////////////////
+
 export const postUser = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
@@ -24,10 +28,14 @@ export const postUser = async (req, res, next) => {
         error: "Information (username, email or password) missing in request",
       });
     }
+
+    // Hash password:
     const hashed = await bcrypt.hash(password, 10);
     if (!hashed) {
       return res.status(500).json({ error: "Hashing not successful" });
     }
+
+    // Create new user:
     const newUser = {
       username,
       email,
@@ -40,6 +48,8 @@ export const postUser = async (req, res, next) => {
         .status(500)
         .json({ error: "User could not be created in database" });
     }
+
+    // Set id in request body for next middleware:
     req.body.id = created._id;
     next();
   } catch (err) {
@@ -47,27 +57,34 @@ export const postUser = async (req, res, next) => {
   }
 };
 
+/////////////////////// Set a cookie: ///////////////////////
+
 export const setCookie = async (req, res, next) => {
   try {
     const { email } = req.body;
+
+    // Find user by email:
     const user = await User.findOne({ email: email });
     if (!user) {
       return res
         .status(404)
         .json({ error: "No user with this email address found." });
     }
+
+    // Create access token:
     const token = await jwtSign(email, user._id, user.username);
     if (!token) {
       return res
         .status(500)
         .json({ error: "Access token could not be created." });
     }
+
+    // Set cookie:
     res.cookie("accessToken", token, {
       maxAge: 1000 * 60 * 240,
       path: "/",
       httpOnly: true,
     });
-    // hier bei rememberMe: true die Zeit auf 30 Tage setzen
     return res
       .status(200)
       .json({ id: user._id, username: user.username, email: user.email });
@@ -75,6 +92,8 @@ export const setCookie = async (req, res, next) => {
     next(err);
   }
 };
+
+/////////////////////// Remove a cookie: ///////////////////////
 
 export const removeCookie = async (req, res, next) => {
   try {
@@ -85,6 +104,8 @@ export const removeCookie = async (req, res, next) => {
   }
 };
 
+/////////////////////// Check password: ///////////////////////
+
 export const checkPassword = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -93,6 +114,8 @@ export const checkPassword = async (req, res, next) => {
         .status(400)
         .json({ error: "Missing information (email or password)." });
     }
+
+    // Find user by email, hash password and compare it:
     const orgUser = await User.findOne({ email: email });
     const orgHashed = orgUser.password;
     const match = await bcrypt.compare(password, orgHashed);
@@ -106,52 +129,3 @@ export const checkPassword = async (req, res, next) => {
     next(err);
   }
 };
-
-// rememberMe noch einbauen in controllers
-
-// export const getAllUsers = async (req, res, next) => {
-//   try {
-//     const users = await User.find({});
-//     res.status(200).json(users);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
-// export const updateUser = async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const oldUser = await User.findById(id);
-//     if (!oldUser) {
-//       return res.status(404).json({ error: "User not found" });
-//     }
-//     const username = req.body.username || oldUser.username;
-//     const email = req.body.email || oldUser.email;
-//     const password =
-//       (await bcrypt.hash(req.body.password, 10)) || oldUser.password;
-//     const newUser = { username, email, password };
-//     const options = { new: true, runValidators: true };
-//     const updated = await User.findByIdAndUpdate(id, newUser, options);
-//     if (!updated) {
-//       return res.status(500).json({ error: "updating user failed" });
-//     }
-//     res.status(200).json(updated);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
-// export const deleteUser = async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const deleted = await User.findByIdAndDelete(id);
-//     if (!deleted) {
-//       return res
-//         .status(404)
-//         .json({ error: "User not found or could not be deleted." });
-//     }
-//     res.status(200).json({ deleted: deleted });
-//   } catch (err) {
-//     next(err);
-//   }
-// };

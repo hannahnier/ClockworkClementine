@@ -5,17 +5,17 @@ import createIcon from "../assets/plus.svg";
 import editIcon from "../assets/editIcon.svg";
 import checkIcon from "../assets/checkIcon.svg";
 import { useNavigate } from "react-router-dom";
-import Confirmation from "./Confirmation";
+import ConfirmDelete from "./ConfirmDelete";
 
 const CalControls = () => {
+  // Get states from context:
   const {
     calendars = [],
-    setCurrentCalendar,
     baseUrl,
     activeUser,
-    setToggleUpdate,
-    currentCalendar,
-    setCalendars,
+    setCurrentCalendar,
+    displayCalendars,
+    setDisplayCalendars,
     showConfirmation,
     setShowConfirmation,
   } = useCalContext();
@@ -26,12 +26,30 @@ const CalControls = () => {
   const [editThisTitle, setEditThisTitle] = useState(null);
   const [titleUpdate, setTitleUpdate] = useState("");
 
-  // Update the displayed calendar according to user's selection:
+  // Add a calendar to list if it is not in there yet:
+  const addNewCalendarToList = (calendar) => {
+    if (displayCalendars && displayCalendars.length > 0) {
+      setDisplayCalendars((array) => {
+        return array.some((item) => item._id === calendar._id)
+          ? array
+          : [...array, calendar];
+      });
+    } else {
+      setDisplayCalendars([calendar]);
+    }
+  };
+
+  // Update the displayed calendars list according to user's selection:
   const handleCalendarSelection = (e, calendar) => {
-    // If the calendar is already selected, unselect it:
-    setCurrentCalendar((prev) =>
-      prev && prev._id === calendar._id ? null : calendar
-    );
+    // Add selected calendar to list:
+    if (e.target.checked) {
+      addNewCalendarToList(calendar);
+      // Remove unselected calendar from list:
+    } else {
+      setDisplayCalendars((array) => {
+        return array.filter((item) => item._id !== calendar._id);
+      });
+    }
   };
 
   // Edit the title of a calendar:
@@ -49,10 +67,15 @@ const CalControls = () => {
         }),
       });
       const data = await res.json();
-      setCurrentCalendar(data);
+      addNewCalendarToList(data);
       setEditThisTitle(null);
       setTitleUpdate("");
-      setToggleUpdate((prev) => !prev);
+      // Map through calendars list and replace title for the edited calendar:
+      setDisplayCalendars((array) =>
+        array.map((cal) =>
+          cal._id === data._id ? { ...cal, title: data.title } : cal
+        )
+      );
       // When editing starts: Set the calendar to be edited:
     } else {
       setEditThisTitle((prev) =>
@@ -82,15 +105,15 @@ const CalControls = () => {
       }),
     });
     const data = await res.json();
-    setCurrentCalendar(data);
+    addNewCalendarToList(data);
     setTitleInput("");
-    setToggleUpdate((prev) => !prev);
   };
 
   return (
     <div className="container">
       {activeUser?.username && (
         <div className="calControls">
+          {/* Input field for entering a new calendar title: */}
           <div className="titleBox">
             <input
               className="newTitleInput"
@@ -100,13 +123,17 @@ const CalControls = () => {
               onChange={(e) => setTitleInput(e.target.value)}
               placeholder="Enter a title"
             />
+
+            {/* "+"-Button for creating a new calendar: */}
             <button
               onClick={createCalendar}
-              className="editButton editButtonSmall"
+              className="editButton editButtonSmall createButton"
             >
               <img src={createIcon} alt="icon for create" />
             </button>
           </div>
+
+          {/* Checkbox for selection/unselection of calendar: */}
           {calendars &&
             calendars.length > 0 &&
             calendars.map((calendar, index) => (
@@ -114,14 +141,24 @@ const CalControls = () => {
                 <input
                   id={calendar._id}
                   type="checkbox"
-                  checked={Boolean(
-                    currentCalendar && currentCalendar._id === calendar._id
-                  )}
+                  checked={
+                    displayCalendars &&
+                    displayCalendars.length > 0 &&
+                    displayCalendars.some((item) => item._id === calendar._id)
+                  }
                   onChange={(e) => {
                     handleCalendarSelection(e, calendar);
                   }}
                   style={{ cursor: "pointer" }}
                 />
+
+                {/* Show calendar's color: */}
+                <div
+                  className="calColorBox"
+                  style={{
+                    backgroundColor: calendar.color,
+                  }}
+                ></div>
 
                 {/* Show text label OR (if editing) input for calendar title: */}
                 {editThisTitle && editThisTitle._id === calendar._id ? (
@@ -142,6 +179,7 @@ const CalControls = () => {
                   </label>
                 )}
 
+                {/* Edit and delete buttons: */}
                 <button
                   className="editButton editButtonSmall"
                   onClick={() => handleTitleEdit(calendar)}
@@ -168,11 +206,18 @@ const CalControls = () => {
             ))}
         </div>
       )}
-      {showConfirmation && <Confirmation />}
+
+      {/*  Confirmation panel (only visible when showConfirmation is active) */}
+      {showConfirmation && <ConfirmDelete />}
+
+      {/* Alternative message if no activeUser */}
       {!activeUser?.username && (
         <div>
           <p>Please log in to see your calendars</p>
-          <button className="standardButton" onClick={() => navigate("/login")}>
+          <button
+            className="standardButton coloredButton"
+            onClick={() => navigate("/login")}
+          >
             Go to Login
           </button>
         </div>

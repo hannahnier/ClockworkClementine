@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCalContext } from "../utils/ContextProvider";
+import eye from "../assets/eye.svg";
+import eyeSlash from "../assets/eye-slash.svg";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
+  // Get states from context:
   const { activeUser, setActiveUser, errorMessage, setErrorMessage, baseUrl } =
     useCalContext();
+  const navigate = useNavigate();
 
+  // Control the input fields:
   const [inputData, setInputData] = useState({
     email: "",
     password: "",
   });
 
+  // Control the password visibility:
+  const [toggleShowPassword, setToggleShowPassword] = useState(false);
+
+  // Default states when the component mounts:
   useEffect(() => {
     setErrorMessage("");
   }, []);
@@ -22,6 +30,7 @@ const LoginPage = () => {
     }
   }, [activeUser]);
 
+  // Handle user login by sending a request to the server:
   const loginUser = async (e) => {
     e.preventDefault();
     try {
@@ -31,6 +40,8 @@ const LoginPage = () => {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
       });
+
+      // Handle response from server:
       if (!res.ok) {
         const errorData = await res.json();
         let someError =
@@ -50,6 +61,8 @@ const LoginPage = () => {
   return (
     <div>
       <h2> {errorMessage ? "Error" : "Login"}</h2>
+
+      {/* Display login form: */}
       {!errorMessage && !activeUser && (
         <div className="formContainer">
           <form
@@ -60,7 +73,7 @@ const LoginPage = () => {
             <label htmlFor="email">Email: </label>
             <input
               className="inputLogin"
-              type="text" // hier später wieder email
+              type="email"
               name="email"
               id="email"
               value={inputData.email}
@@ -70,26 +83,31 @@ const LoginPage = () => {
             />
 
             <label htmlFor="password">Password: </label>
-            <input
-              className="inputLogin"
-              type="password"
-              name="password"
-              id="password"
-              value={inputData.password}
-              onChange={(e) => {
-                setInputData({ ...inputData, [e.target.name]: e.target.value });
-              }}
-            />
-            <label className="labelInline" htmlFor="rememberMe">
-              Remember me
-            </label>
-            <input
-              className="inputLogin inputInline"
-              type="checkbox"
-              id="rememberMe"
-              name="rememberMe"
-            />
-            <button type="submit" className="standardButton submitButton">
+            <div className="passwordBox">
+              <input
+                className="inputLogin inputInline"
+                type={toggleShowPassword ? "text" : "password"}
+                name="password"
+                id="password"
+                value={inputData.password}
+                onChange={(e) => {
+                  setInputData({
+                    ...inputData,
+                    [e.target.name]: e.target.value,
+                  });
+                }}
+              />
+              <img
+                onClick={() => {
+                  setToggleShowPassword((prev) => !prev);
+                }}
+                className="eyeIcon"
+                src={toggleShowPassword ? eye : eyeSlash}
+                alt="icon for showing or hiding password"
+              />
+            </div>
+
+            <button type="submit" className="standardButton submitButton ">
               Log in
             </button>
           </form>
@@ -99,6 +117,8 @@ const LoginPage = () => {
           </p>
         </div>
       )}
+
+      {/* Display Error Message: */}
       {errorMessage && (
         <div>
           <p>{errorMessage}</p>

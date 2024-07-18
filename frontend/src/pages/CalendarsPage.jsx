@@ -10,13 +10,15 @@ const CalendarsPage = () => {
     activeUser,
     setActiveUser,
     baseUrl,
-    toggleUpdate,
     showModal,
+    displayCalendars,
     currentCalendar,
-    setCurrentCalendar,
+    events,
   } = useCalContext();
 
+  // Fetch all of the active user's calendars:
   useEffect(() => {
+    console.log("refetching calendars");
     const fetchCalendars = async () => {
       const rawData = await fetch(`${baseUrl}/calendars`, {
         credentials: "include",
@@ -24,25 +26,22 @@ const CalendarsPage = () => {
       const data = await rawData.json();
       setCalendars(data.calendars || []);
       setActiveUser(data.user || {});
-      if (!currentCalendar) {
-        setCurrentCalendar(data.calendars[0] || null);
-      }
     };
-
-    if (activeUser?.username) {
-      fetchCalendars();
-    }
-  }, [toggleUpdate]);
+    fetchCalendars();
+  }, [displayCalendars, currentCalendar, events]);
 
   return (
     <div>
+      {/* Display modal (only when showModal is true) */}
       {showModal && <Modal />}
 
+      {/* Block for controlling the user's calendars */}
       <CalControls />
 
-      {currentCalendar && currentCalendar.events ? (
+      {/* Display the calendar (or an alternative message) */}
+      {displayCalendars && displayCalendars.length > 0 ? (
         <div>
-          <MyCalendar calendar={currentCalendar} />
+          <MyCalendar />
         </div>
       ) : activeUser?.username ? (
         <h4>No calendar selected</h4>

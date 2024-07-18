@@ -1,13 +1,14 @@
 import { useCalContext } from "../utils/ContextProvider";
 
-const Confirmation = () => {
+const ConfirmDelete = () => {
+  //  Get states from the context:
   const {
     setCalendars,
     baseUrl,
-    setToggleUpdate,
     currentCalendar,
     setCurrentCalendar,
     setShowConfirmation,
+    setDisplayCalendars,
   } = useCalContext();
 
   // Delete a calendar:
@@ -22,24 +23,26 @@ const Confirmation = () => {
       setCurrentCalendar(null);
     }
     setCalendars(data.calendars);
-    setToggleUpdate((prev) => !prev);
+    setDisplayCalendars((array) =>
+      array.filter((calendar) => calendar._id !== cal._id)
+    );
     setShowConfirmation(false);
   };
 
   return (
     <div className="modal">
-      <div className="modalInner">
+      <div className="modalInner coloredModal">
         <p>
           Are you sure you want to delete this calendar with all its events?
         </p>
         <button
-          className="standardButton"
+          className="standardButton coloredButton"
           onClick={() => deleteCalendar(currentCalendar)}
         >
           Yes
         </button>
         <button
-          className="standardButton"
+          className="standardButton coloredButton"
           onClick={() => setShowConfirmation(false)}
         >
           No
@@ -49,4 +52,4 @@ const Confirmation = () => {
   );
 };
 
-export default Confirmation;
+export default ConfirmDelete;

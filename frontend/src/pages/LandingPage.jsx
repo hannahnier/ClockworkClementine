@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useCalContext } from "../utils/ContextProvider";
 
 const LandingPage = () => {
-  const navigate = useNavigate();
+  // Get states from context:
   const { activeUser, firstVisit, setFirstVisit, showCookieBox } =
     useCalContext();
+  const navigate = useNavigate();
 
+  // Set firstVisit to true after 100ms (important for animations):
   useEffect(() => {
     const timer = setTimeout(() => setFirstVisit(true), 100);
     return () => clearTimeout(timer);
@@ -15,6 +17,8 @@ const LandingPage = () => {
   return (
     <div className="landingContainer">
       <h1>Clockwork Clementine</h1>
+
+      {/* Show clementine-clock animation */}
       <div
         className={`clementine ${
           firstVisit && !showCookieBox ? "transition" : ""
@@ -32,6 +36,8 @@ const LandingPage = () => {
             firstVisit && !showCookieBox ? "transition" : ""
           }`}
         ></div>
+
+        {/* Buttons for register & login: */}
       </div>
       {!activeUser && (
         <button
@@ -45,7 +51,7 @@ const LandingPage = () => {
       )}
       {!activeUser && (
         <button
-          className={`startButton standardButton ${
+          className={`startButton standardButton coloredButton ${
             firstVisit && !showCookieBox ? "transition" : ""
           }`}
           onClick={() => navigate("/register")}
@@ -54,6 +60,7 @@ const LandingPage = () => {
         </button>
       )}
 
+      {/* Alternatively: Button for directly navigating to the calendars page: */}
       {activeUser && (
         <button
           className={`startButton standardButton ${
