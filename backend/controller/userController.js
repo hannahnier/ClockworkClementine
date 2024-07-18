@@ -57,14 +57,49 @@ export const postUser = async (req, res, next) => {
   }
 };
 
+/////////////////////// Check password: ///////////////////////
+
+export const checkPassword = async (req, res, next) => {
+  console.log("checkPassword");
+  try {
+    const { email, password } = req.body;
+    console.log("email", email);
+    console.log("password", password);
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ error: "Missing information (email or password)." });
+    }
+
+    // Find user by email, hash password and compare it:
+    const orgUser = await User.findOne({ email: email });
+    console.log("orgUser", orgUser);
+    const orgHashed = orgUser.password;
+    console.log("orgHashed", orgHashed);
+    const match = await bcrypt.compare(password, orgHashed);
+    console.log("match", match);
+    if (!match) {
+      return res
+        .status(400)
+        .json({ error: "Login failed. Wrong email or password." });
+    }
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
 /////////////////////// Set a cookie: ///////////////////////
 
 export const setCookie = async (req, res, next) => {
+  console.log("setCookie");
   try {
     const { email } = req.body;
+    console.log("email", email);
 
     // Find user by email:
     const user = await User.findOne({ email: email });
+    console.log("user", user);
     if (!user) {
       return res
         .status(404)
@@ -73,6 +108,7 @@ export const setCookie = async (req, res, next) => {
 
     // Create access token:
     const token = await jwtSign(email, user._id, user.username);
+    console.log("token", token);
     if (!token) {
       return res
         .status(500)
@@ -85,6 +121,7 @@ export const setCookie = async (req, res, next) => {
       path: "/",
       httpOnly: true,
     });
+    console.log("cookie set");
     return res
       .status(200)
       .json({ id: user._id, username: user.username, email: user.email });
@@ -99,32 +136,6 @@ export const removeCookie = async (req, res, next) => {
   try {
     res.clearCookie("accessToken");
     res.status(200).json({ user: null });
-  } catch (err) {
-    next(err);
-  }
-};
-
-/////////////////////// Check password: ///////////////////////
-
-export const checkPassword = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ error: "Missing information (email or password)." });
-    }
-
-    // Find user by email, hash password and compare it:
-    const orgUser = await User.findOne({ email: email });
-    const orgHashed = orgUser.password;
-    const match = await bcrypt.compare(password, orgHashed);
-    if (!match) {
-      return res
-        .status(400)
-        .json({ error: "Login failed. Wrong email or password." });
-    }
-    next();
   } catch (err) {
     next(err);
   }
