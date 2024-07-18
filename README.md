@@ -26,10 +26,63 @@ Three mongoose collections are in use (users, calendars and events). This made i
 
 <img src="./src/assets/screenshot.png">
 
-## Try it!
+## Installation and Local Usage
+
+To run the app locally on your device, follow these steps:
+
+1. **Clone the Repository and navigate to the project directory:**
+
+   ```bash
+   git clone git@github.com:username/repository.git
+   cd repository
+   ```
+
+2. **Set Server URL to Localhost:**
+   In `frontend/src/utils/ContextProvider.jsx`, make sure to set:
+
+   ```javascript
+   const baseUrl = "http://localhost:3000";
+   ```
+
+3. **Install Dependencies:**
+   Install npm (node package manager) if necessary. Then, run the following commands to install the required packages:
+
+   ```javascript
+    npm install
+    cd frontend && npm install
+    cd ../backend && npm install
+    cd ..
+
+   ```
+
+4. **Start the Server and Client:**
+
+   ```javascript
+    cd backend && nodemon server.js
+    cd ../frontend && npm run dev
+   ```
+
+5. **Access the application:**
+   Follow the link provided in your terminal to access the application.
+
+## Deployed Website
 
 Take a look at the deployed website here: [ClockworkClementine.onrender.com](https://ClockworkClementine.onrender.com/)
 
-Hint: If you do not want to register, you might want to use preconfigured login data:
+### Important Notice
+
+**Registration and login will only work if you enable third-party cookies for this site.** If your browser usually blocks these, please make sure to add "clockworkclementine.onrender.com" to the Allow List.
+
+For instance, in Google Chrome:
+
+1. Go to `Settings`
+2. Navigate to `Privacy and security`
+3. Click on `Third party cookies`
+4. Go to `Sites allowed to use third-party cookies`
+5. Add "clockworkclementine.onrender.com" to the list
+
+### Preconfigured login data
+
+If you do not want to register, consider using the following login data:
 
 <img src="./src/assets/testLogin.png" alt="image of login" width="300">

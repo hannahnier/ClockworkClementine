@@ -54,7 +54,6 @@ input,
 select {
   padding: 0.2em;
   margin: 0.5em 0;
-  width: 130px;
 }
 
 input:focus {

@@ -14,24 +14,6 @@ const LandingPage = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  //  {/* make a test request just for checking if cors is working: */}
-  const testCors = async () => {
-    try {
-      const response = await fetch(
-        `${baseUrl}/users/669675836453781befee349c`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  testCors();
-
   return (
     <div className="landingContainer">
       <h1>Clockwork Clementine</h1>

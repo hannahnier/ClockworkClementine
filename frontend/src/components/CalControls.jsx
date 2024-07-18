@@ -99,7 +99,7 @@ const CalControls = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        title: titleInput || "Untitled Calendar",
+        title: titleInput || "Untitled",
         events: [],
         user: activeUser.id,
       }),
