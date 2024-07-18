@@ -10,8 +10,8 @@ const ContextProvider = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const baseUrl = "https://clockworkclementineserver.onrender.com";
-  // const baseUrl = "http://localhost:3000";
+  // const baseUrl = "https://clockworkclementineserver.onrender.com";
+  const baseUrl = "http://localhost:3000";
 
   // calendars:
   const [calendars, setCalendars] = useState([]);

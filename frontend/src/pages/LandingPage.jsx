@@ -21,6 +21,7 @@ const LandingPage = () => {
         `${baseUrl}/users/669675836453781befee349c`,
         {
           method: "GET",
+          credentials: "include",
         }
       );
       const data = await response.json();
