@@ -6,22 +6,27 @@ const userSchema = new Schema(
   {
     username: {
       type: String,
+      required: true,
       set: function (input) {
         return validator.escape(input);
       },
-    }, // hier später wieder required einfügen
+    },
     email: {
       type: String,
+      required: true,
+      unique: true,
+      validator: validator.isEmail,
       set: function (input) {
         return validator.escape(input);
       },
-    }, // hier später wieder required einfügen und unique (und validator.isEmail)
+    },
     password: {
       type: String,
+      required: true,
       set: function (input) {
         return validator.escape(input);
       },
-    }, // hier später wieder required einfügen
+    },
     calendars: [{ type: mongoose.Schema.Types.ObjectId, ref: "Calendar" }],
     rememberMe: { type: Boolean },
   },

@@ -12,6 +12,13 @@ const calendarSchema = new Schema(
         return validator.escape(input);
       },
     },
+    color: {
+      type: String,
+      default: "#000000",
+      set: function (input) {
+        return validator.escape(input);
+      },
+    },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     events: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],
   },

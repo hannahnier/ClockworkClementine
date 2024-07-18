@@ -3,12 +3,12 @@ import { useCalContext } from "../utils/ContextProvider";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { de } from "date-fns/locale";
 import { format, parse, startOfWeek, getDay } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
+// Configuration for React Big Calendar:
 const locales = {
   de: de,
 };
-
 const localizer = dateFnsLocalizer({
   format,
   parse,
@@ -17,27 +17,44 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-const MyCalendar = ({ calendar }) => {
+const MyCalendar = () => {
+  // Get states from context:
   const {
     errorMessage,
     setShowModal,
-    currentEvent,
-    setCurrentEvent,
+    eventInput,
+    setEventInput,
     setModalType,
+    displayCalendars,
+    setCurrentCalendar,
+    events,
+    setEvents,
   } = useCalContext();
 
-  const [events, setEvents] = useState([]);
-
+  // Convert the events dates to JavaScript Date objects and add color:
   useEffect(() => {
-    setEvents(
+    const nestedEvents = displayCalendars.flatMap((calendar) =>
       calendar.events.map((event) => ({
         ...event,
         start: new Date(event.start),
         end: new Date(event.end),
+        color: calendar.color,
       }))
     );
-  }, [calendar.events]);
+    setEvents(nestedEvents);
+  }, [displayCalendars]);
 
+  // Get the color of the event:
+  const getEventColor = (event) => {
+    const style = {
+      backgroundColor: event.color,
+    };
+    return {
+      style: style,
+    };
+  };
+
+  // Handle click on an event: Open modal & sanitize event data
   const handleClickOnEvent = (event) => {
     setModalType("update");
     const eventSanitized = {
@@ -45,23 +62,25 @@ const MyCalendar = ({ calendar }) => {
       start: format(event.start, "yyyy-MM-dd"),
       end: format(event.end, "yyyy-MM-dd"),
     };
-    setCurrentEvent(eventSanitized);
+    setEventInput(eventSanitized);
     setShowModal(true);
   };
 
+  // Handle click on a date: Open modal & set start & end dates
   const handleClickOnDate = (event) => {
-    setCurrentEvent({
-      ...currentEvent,
+    setEventInput({
+      ...eventInput,
       ["start"]: format(event.slots[0], "yyyy-MM-dd"),
       ["end"]: format(event.slots[0], "yyyy-MM-dd"),
     });
+    setCurrentCalendar(displayCalendars[0] || null);
     setModalType("create");
     setShowModal(true);
   };
 
   return (
     <div className="calendarBox">
-      <p>{calendar.title}</p>
+      {/* Integrate React Big Calendar Component: */}
       {!errorMessage && (
         <Calendar
           className="calendar"
@@ -75,9 +94,17 @@ const MyCalendar = ({ calendar }) => {
           onSelectSlot={(event) => {
             handleClickOnDate(event);
           }}
+          eventPropGetter={getEventColor}
           selectable
           views={["month"]}
-          style={{ height: 500, width: "500px" }}
+          style={{
+            height: 500,
+            minWidth: "300px",
+            width: "clamp(320px, 70vw, 600px)",
+            border: "4px solid #05c79d",
+            borderRadius: "10px",
+            padding: "10px",
+          }}
         />
       )}
       {errorMessage && <p>{errorMessage}</p>}

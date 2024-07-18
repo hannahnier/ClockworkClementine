@@ -3,6 +3,8 @@ import { User } from "../models/userModel.js";
 import { Event } from "../models/eventModel.js";
 import { jwtVerify } from "../utils/jwt.js";
 
+/////////////////////// Create a new calendar: ///////////////////////
+
 export const postCalendar = async (req, res, next) => {
   try {
     const { title, events, user } = req.body;
@@ -11,37 +13,74 @@ export const postCalendar = async (req, res, next) => {
         .status(400)
         .json({ error: "Calendar could not be assigned to a user" });
     }
-    const newCalendar = { title: title || "", events: events || [], user };
-    const created = await Calendar.create(newCalendar);
 
-    if (!created) {
-      return res
-        .status(500)
-        .json({ error: "Calendar could not be created in database" });
-    }
-
-    const associatedUser = await User.findById(user);
-
+    // Find the user:
+    const associatedUser = await User.findById(user).populate("calendars");
     if (!associatedUser) {
       return res
         .status(404)
         .json({ error: "User not found or could not be associated" });
     }
 
-    const updatedCalendars = associatedUser.calendars.concat(created._id);
+    // Assign a color (if it is already in use, pick a random hexadecimal color):
+    const bestColors = [
+      "#9babf7",
+      "#f89090",
+      "#fca3f7",
+      "#05c79d",
+      "#fc4949",
+      "#73e76f",
+      "#fcc65a",
+      "#bd8efa",
+      "#81e6c4",
+      "#ec49bb",
+      "#6968cf",
+      "#ff7f3e",
+      "#278eee",
+      "#07866b",
+    ];
 
+    // Find a color that is not already in use
+    // (preferably from the bestColors array, but after 30 attempts choose randomly):
+    const usedColors = associatedUser.calendars.map(
+      (calendar) => calendar.color
+    );
+    let color = bestColors[Math.floor(Math.random() * bestColors.length)];
+    let i = 30;
+    while (usedColors.includes(color) && i > 0) {
+      color = bestColors[Math.floor(Math.random() * bestColors.length)];
+      i--;
+    }
+    if (usedColors.includes(color)) {
+      color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+    }
+
+    // Create the calendar:
+    const newCalendar = {
+      title: title || "",
+      events: events || [],
+      user,
+      color: color || "#000000",
+    };
+    const created = await Calendar.create(newCalendar);
+    if (!created) {
+      return res
+        .status(500)
+        .json({ error: "Calendar could not be created in database" });
+    }
+
+    // Update user profile:
+    const updatedCalendars = associatedUser.calendars.concat(created._id);
     const updatedUser = await User.findByIdAndUpdate(
       user,
       { calendars: updatedCalendars },
       { new: true }
     );
-
     if (!updatedUser) {
       return res
         .status(500)
         .json({ error: "Calendar could not be added to user profile" });
     }
-
     const populatedUser = await User.findById(user).populate("calendars");
 
     res.status(201).json(created);
@@ -50,6 +89,7 @@ export const postCalendar = async (req, res, next) => {
   }
 };
 
+/////////////////////// Check & verify accessToken ///////////////////////
 export const authenticateUser = async (req, res, next) => {
   try {
     const token = req.cookies["accessToken"];
@@ -71,6 +111,7 @@ export const authenticateUser = async (req, res, next) => {
   }
 };
 
+/////////////////////// Get all calendars of the user: ///////////////////////
 export const getUserCalendars = async (req, res, next) => {
   try {
     const { id } = req.user;
@@ -81,6 +122,7 @@ export const getUserCalendars = async (req, res, next) => {
   }
 };
 
+/////////////////////// Update a calendar: ///////////////////////
 export const updateCalendar = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -102,6 +144,7 @@ export const updateCalendar = async (req, res, next) => {
   }
 };
 
+/////////////////////// Delete a calendar: ///////////////////////
 export const deleteCalendar = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -143,6 +186,8 @@ export const deleteCalendar = async (req, res, next) => {
         .status(500)
         .json({ error: "Calendar could not be removed from user" });
     }
+
+    // Return updated user with info on calendars:
     const populatedUser = await User.findById(user._id).populate("calendars");
 
     res.status(201).json(populatedUser);

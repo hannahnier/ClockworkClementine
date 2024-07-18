@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useCalContext } from "./ContextProvider";
 
 const CookieBox = () => {
+  // Get states from context:
   const { showCookieBox, setShowCookieBox } = useCalContext();
 
   //   Check if the user has already given consent:

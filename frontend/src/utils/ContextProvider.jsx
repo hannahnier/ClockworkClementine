@@ -3,20 +3,22 @@ import { createContext, useState, useContext } from "react";
 export const CalContext = createContext();
 
 const ContextProvider = ({ children }) => {
+  // utils:
   const [showCookieBox, setShowCookieBox] = useState(false);
-  const [calendars, setCalendars] = useState([]);
-  const [events, setEvents] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [activeUser, setActiveUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [firstVisit, setFirstVisit] = useState(false);
-  const [toggleUpdate, setToggleUpdate] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  // const baseUrl = "https://clockworkclementineserver.onrender.com";
+  const baseUrl = "http://localhost:3000";
+
+  // calendars:
+  const [calendars, setCalendars] = useState([]);
+  const [events, setEvents] = useState([]);
   const [currentCalendar, setCurrentCalendar] = useState(null);
   const [displayCalendars, setDisplayCalendars] = useState([]);
-  const [currentEvent, setCurrentEvent] = useState({
+  const [eventInput, setEventInput] = useState({
     title: "",
     start: "",
     startTime: "",
@@ -24,41 +26,45 @@ const ContextProvider = ({ children }) => {
     endTime: "",
   });
 
-  // const baseUrl = "https://clockworkclementineserver.onrender.com";
-  const baseUrl = "http://localhost:3000";
+  // user:
+  const [users, setUsers] = useState([]);
+  const [activeUser, setActiveUser] = useState(null);
 
   return (
     <CalContext.Provider
       value={{
+        // utils:
         showCookieBox,
         setShowCookieBox,
-        calendars,
-        setCalendars,
-        events,
-        setEvents,
-        users,
-        setUsers,
-        activeUser,
-        setActiveUser,
         errorMessage,
         setErrorMessage,
         firstVisit,
         setFirstVisit,
-        baseUrl,
-        toggleUpdate,
-        setToggleUpdate,
         showModal,
         setShowModal,
-        showConfirmation,
-        setShowConfirmation,
-        currentCalendar,
-        setCurrentCalendar,
         modalType,
         setModalType,
-        currentEvent,
-        setCurrentEvent,
+        showConfirmation,
+        setShowConfirmation,
+        baseUrl,
+
+        // calendars:
+        calendars,
+        setCalendars,
+        events,
+        setEvents,
+        currentCalendar,
+        setCurrentCalendar,
         displayCalendars,
         setDisplayCalendars,
+        eventInput,
+        setEventInput,
+
+        // user:
+        users,
+        setUsers,
+        activeUser,
+        setActiveUser,
       }}
     >
       {children}

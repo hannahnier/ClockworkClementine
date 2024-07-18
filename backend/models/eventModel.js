@@ -7,18 +7,19 @@ const eventSchema = new Schema(
   {
     start: {
       type: Date,
-      // required machen?
+      required: true,
     },
     end: {
       type: Date,
-      // required machen?
+      required: true,
     },
     title: {
       type: String,
+      required: true,
       set: function (input) {
         return validator.escape(input);
       },
-    }, // required machen?
+    },
     calendar: { type: mongoose.Schema.Types.ObjectId, ref: "Calendar" },
   },
   { versionKey: false }
