@@ -18,13 +18,13 @@ The main goal was to create a seamless user experience for managing events and c
 - **Data Validation:** Strong data validation to ensure integrity.
 - **Error Handling:** Error handling middleware, with important error messages being transferred to the frontend.
 
-<img src="./src/assets/screenshot2.png" width="600">
+<img src="./frontend/src/assets/screenshot2.png" width="600">
 
 ## Database Relations
 
 Three mongoose collections are in use (users, calendars and events). This made it necessary to populate data and manage all collections effectively:
 
-<img src="./src/assets/screenshot.png">
+<img src="./frontend/src/assets/screenshot.png">
 
 ## Installation and Local Usage
 
@@ -85,4 +85,4 @@ For instance, in Google Chrome:
 
 If you do not want to register, consider using the following login data:
 
-<img src="./src/assets/testLogin.png" alt="image of login" width="300">
+<img src="./frontend/src/assets/testLogin.png" alt="image of login" width="300">
