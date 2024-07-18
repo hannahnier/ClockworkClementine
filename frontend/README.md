@@ -4,8 +4,6 @@ Clockwork Clementine is an event management system developed as part of a full-s
 
 The main goal was to create a seamless user experience for managing events and calendars. In addition to basic features such as setting up a server, managing database connections and integrating a frontend interface, the project also includes several advanced features, such as user authentication, error handling, and data validation.
 
-Take a look at the deployed website here: [ClockworkClementine.onrender.com](https://ClockworkClementine.onrender.com/)
-
 ## Technologies Used
 
 - **Backend:** Node.js, Express, Mongoose, JWT
@@ -20,10 +18,18 @@ Take a look at the deployed website here: [ClockworkClementine.onrender.com](htt
 - **Data Validation:** Strong data validation to ensure integrity.
 - **Error Handling:** Error handling middleware, with important error messages being transferred to the frontend.
 
-<img src="./src/assets/screenshot2.png">
+<img src="./src/assets/screenshot2.png" width="600">
 
 ## Database Relations
 
 Three mongoose collections are in use (users, calendars and events). This made it necessary to populate data and manage all collections effectively:
 
 <img src="./src/assets/screenshot.png">
+
+## Try it!
+
+Take a look at the deployed website here: [ClockworkClementine.onrender.com](https://ClockworkClementine.onrender.com/)
+
+Hint: If you do not want to register, you might want to use preconfigured login data:
+
+<img src="./src/assets/testLogin.png" alt="image of login" width="300">

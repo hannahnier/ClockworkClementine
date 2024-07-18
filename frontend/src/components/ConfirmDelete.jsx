@@ -8,6 +8,7 @@ const ConfirmDelete = () => {
     currentCalendar,
     setCurrentCalendar,
     setShowConfirmation,
+    setDisplayCalendars,
   } = useCalContext();
 
   // Delete a calendar:
@@ -22,6 +23,9 @@ const ConfirmDelete = () => {
       setCurrentCalendar(null);
     }
     setCalendars(data.calendars);
+    setDisplayCalendars((array) =>
+      array.filter((calendar) => calendar._id !== cal._id)
+    );
     setShowConfirmation(false);
   };
 

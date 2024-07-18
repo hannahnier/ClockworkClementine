@@ -7,7 +7,6 @@ import CalControls from "../components/CalControls";
 const CalendarsPage = () => {
   const {
     setCalendars,
-    calendars,
     activeUser,
     setActiveUser,
     baseUrl,
@@ -25,9 +24,7 @@ const CalendarsPage = () => {
         credentials: "include",
       });
       const data = await rawData.json();
-      console.log("data", data);
       setCalendars(data.calendars || []);
-      console.log("calendars", calendars);
       setActiveUser(data.user || {});
     };
     fetchCalendars();

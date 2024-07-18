@@ -107,7 +107,6 @@ const CalControls = () => {
     const data = await res.json();
     addNewCalendarToList(data);
     setTitleInput("");
-    setDisplayCalendars((array) => [...array, data]);
   };
 
   return (

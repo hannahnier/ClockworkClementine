@@ -4,6 +4,7 @@ import { Calendar } from "../models/calendarModel.js";
 /////////////////////// Create a new event: ///////////////////////
 
 export const createEvent = async (req, res, next) => {
+  console.log("hier");
   try {
     let { calendarId } = req.params;
     let { start, end, title } = req.body;

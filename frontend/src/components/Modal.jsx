@@ -53,6 +53,7 @@ const Modal = () => {
   );
 
   const changeCalendarInput = (e) => {
+    console.log("displayCalendars", displayCalendars);
     setCalendarInput(e.target.value);
     setCurrentCalendar(
       displayCalendars.find((cal) => cal._id === e.target.value)
@@ -158,7 +159,7 @@ const Modal = () => {
             <select
               name="calendar"
               id="calendarSelect"
-              value={currentCalendar?._id || calendarInput}
+              value={calendarInput || displayCalendars[0]._id || ""}
               onChange={changeCalendarInput}
             >
               {displayCalendars.map((calendar) => (
@@ -177,13 +178,12 @@ const Modal = () => {
           </label>
           <input
             type="text"
-            value={eventInput.title || "Meeting"}
+            value={eventInput.title || ""}
             name="title"
             id="title"
             onChange={(e) => changeInput(e)}
             required
             placeholder="Meeting with..."
-            default="Meeting"
           />
         </div>
         <div className="inputFields">
