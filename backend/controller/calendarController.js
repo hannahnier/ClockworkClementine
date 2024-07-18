@@ -91,20 +91,24 @@ export const postCalendar = async (req, res, next) => {
 
 /////////////////////// Check & verify accessToken ///////////////////////
 export const authenticateUser = async (req, res, next) => {
+  console.log("authenticateUser");
   try {
     const token = req.cookies["accessToken"];
+    console.log("token", token);
     if (!token) {
       return res.status(400).json({
         error: "Cookie is missing or has expanded. Please log in first.",
       });
     }
     const verification = await jwtVerify(token);
+    console.log("verification", verification);
     if (!verification) {
       return res
         .status(400)
         .json({ error: "Cookie could not be verified. Please log in first." });
     }
     req.user = verification;
+    console.log("req.user", req.user);
     next();
   } catch (err) {
     next(err);
@@ -113,9 +117,12 @@ export const authenticateUser = async (req, res, next) => {
 
 /////////////////////// Get all calendars of the user: ///////////////////////
 export const getUserCalendars = async (req, res, next) => {
+  console.log("getUserCalendars");
   try {
     const { id } = req.user;
+    console.log("id", id);
     const calendars = await Calendar.find({ user: id }).populate("events");
+    console.log("calendars", calendars);
     res.status(200).json({ calendars: calendars, user: req.user });
   } catch (err) {
     next(err);

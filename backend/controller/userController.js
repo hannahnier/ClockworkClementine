@@ -120,6 +120,8 @@ export const setCookie = async (req, res, next) => {
       maxAge: 1000 * 60 * 240,
       path: "/",
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
     });
     console.log("cookie set");
     return res
