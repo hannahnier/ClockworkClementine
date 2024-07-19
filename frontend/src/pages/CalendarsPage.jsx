@@ -18,8 +18,6 @@ const CalendarsPage = () => {
 
   // Fetch all of the active user's calendars:
   useEffect(() => {
-    console.log("activeUser", activeUser);
-    console.log("refetching calendars");
     const fetchCalendars = async () => {
       const rawData = await fetch(`${baseUrl}/calendars`, {
         credentials: "include",

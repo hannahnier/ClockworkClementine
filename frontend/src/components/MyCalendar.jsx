@@ -62,6 +62,9 @@ const MyCalendar = () => {
       start: format(event.start, "yyyy-MM-dd"),
       end: format(event.end, "yyyy-MM-dd"),
     };
+    setCurrentCalendar(
+      displayCalendars.find((cal) => cal._id === event.calendar)
+    );
     setEventInput(eventSanitized);
     setShowModal(true);
   };

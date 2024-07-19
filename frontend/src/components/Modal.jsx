@@ -22,7 +22,7 @@ const Modal = () => {
     if (!currentCalendar && displayCalendars.length > 0) {
       setCurrentCalendar(displayCalendars[0]);
     }
-  }, []);
+  }, [displayCalendars]);
 
   // Map through calendars and update events for the edited calendar:
   const updateCalendarEvents = (data) => {
@@ -53,7 +53,6 @@ const Modal = () => {
   );
 
   const changeCalendarInput = (e) => {
-    console.log("displayCalendars", displayCalendars);
     setCalendarInput(e.target.value);
     setCurrentCalendar(
       displayCalendars.find((cal) => cal._id === e.target.value)

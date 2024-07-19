@@ -3,6 +3,12 @@ import { createContext, useState, useContext } from "react";
 export const CalContext = createContext();
 
 const ContextProvider = ({ children }) => {
+  //
+  // ************* Change the serverURL to localhost here:  *************
+  //
+  // const baseUrl = "https://clockworkclementineserver.onrender.com";
+  const baseUrl = "http://localhost:3000";
+
   // utils:
   const [showCookieBox, setShowCookieBox] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -10,8 +16,6 @@ const ContextProvider = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
-  // const baseUrl = "https://clockworkclementineserver.onrender.com";
-  const baseUrl = "http://localhost:3000";
 
   // calendars:
   const [calendars, setCalendars] = useState([]);
@@ -34,6 +38,7 @@ const ContextProvider = ({ children }) => {
     <CalContext.Provider
       value={{
         // utils:
+        baseUrl,
         showCookieBox,
         setShowCookieBox,
         errorMessage,
@@ -46,7 +51,6 @@ const ContextProvider = ({ children }) => {
         setModalType,
         showConfirmation,
         setShowConfirmation,
-        baseUrl,
 
         // calendars:
         calendars,
