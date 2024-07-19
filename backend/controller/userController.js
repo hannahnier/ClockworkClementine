@@ -128,6 +128,8 @@ export const setCookie = async (req, res, next) => {
 /////////////////////// Remove a cookie: ///////////////////////
 
 export const removeCookie = async (req, res, next) => {
+  console.log(process.env.NODE_ENV, "env value");
+  console.log(process.env.NODE_ENV === "production", "env true?");
   try {
     res.clearCookie("accessToken", {
       path: "/",
