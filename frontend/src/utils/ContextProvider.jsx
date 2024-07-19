@@ -6,8 +6,8 @@ const ContextProvider = ({ children }) => {
   //
   // ************* Change the serverURL to localhost here:  *************
   //
-  // const baseUrl = "https://clockworkclementineserver.onrender.com";
-  const baseUrl = "http://localhost:3000";
+  const baseUrl = "https://clockworkclementineserver.onrender.com";
+  // const baseUrl = "http://localhost:3000";
 
   // utils:
   const [showCookieBox, setShowCookieBox] = useState(false);
