@@ -108,6 +108,9 @@ export const setCookie = async (req, res, next) => {
     }
     console.log("Token: ", token);
 
+    console.log(process.env.NODE_ENV, "env value");
+    console.log(process.env.NODE_ENV === "production", "env true?");
+
     // Set cookie:
     res.cookie("accessToken", token, {
       maxAge: 1000 * 60 * 240,
