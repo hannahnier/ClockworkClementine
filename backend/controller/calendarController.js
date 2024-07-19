@@ -6,17 +6,14 @@ import { jwtVerify } from "../utils/jwt.js";
 /////////////////////// Check & verify accessToken ///////////////////////
 
 export const authenticateUser = async (req, res, next) => {
-  console.log("authenticate");
   try {
     const token = req.cookies["accessToken"];
-    console.log(token, "token");
     if (!token) {
       return res.status(400).json({
         error: "Cookie is missing or has expanded. Please log in first.",
       });
     }
     const verification = await jwtVerify(token);
-    console.log(verification, "verification");
     if (!verification) {
       return res
         .status(400)
@@ -34,7 +31,6 @@ export const authenticateUser = async (req, res, next) => {
 export const getUserCalendars = async (req, res, next) => {
   try {
     const { id } = req.user;
-    console.log(req.user, "req.user");
     const calendars = await Calendar.find({ user: id }).populate("events");
     res.status(200).json({ calendars: calendars, user: req.user });
   } catch (err) {

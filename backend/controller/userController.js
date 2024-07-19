@@ -106,10 +106,8 @@ export const setCookie = async (req, res, next) => {
         .status(500)
         .json({ error: "Access token could not be created." });
     }
-    console.log("Token: ", token);
-
-    console.log(process.env.NODE_ENV, "env value");
-    console.log(process.env.NODE_ENV === "production", "env true?");
+    // console.log(process.env.NODE_ENV, "env value");
+    // console.log(process.env.NODE_ENV === "production", "env true?");
 
     // Set cookie:
     res.cookie("accessToken", token, {
@@ -119,7 +117,6 @@ export const setCookie = async (req, res, next) => {
       sameSite: "None",
       secure: process.env.NODE_ENV === "production",
     });
-    console.log("Cookie set");
     return res
       .status(200)
       .json({ id: user._id, username: user.username, email: user.email });
@@ -131,8 +128,8 @@ export const setCookie = async (req, res, next) => {
 /////////////////////// Remove a cookie: ///////////////////////
 
 export const removeCookie = async (req, res, next) => {
-  console.log(process.env.NODE_ENV, "env value");
-  console.log(process.env.NODE_ENV === "production", "env true?");
+  // console.log(process.env.NODE_ENV, "env value");
+  // console.log(process.env.NODE_ENV === "production", "env true?");
   try {
     res.clearCookie("accessToken", {
       path: "/",
