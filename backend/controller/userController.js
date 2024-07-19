@@ -105,7 +105,6 @@ export const setCookie = async (req, res, next) => {
         .status(404)
         .json({ error: "No user with this email address found." });
     }
-
     // Create access token:
     const token = await jwtSign(email, user._id, user.username);
     console.log("token", token);
@@ -120,7 +119,7 @@ export const setCookie = async (req, res, next) => {
       maxAge: 1000 * 60 * 240,
       path: "/",
       httpOnly: true,
-      sameSite: "none",
+      SameSite: "None",
       secure: true,
     });
     console.log("cookie set");
