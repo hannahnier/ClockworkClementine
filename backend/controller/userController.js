@@ -60,11 +60,8 @@ export const postUser = async (req, res, next) => {
 /////////////////////// Check password: ///////////////////////
 
 export const checkPassword = async (req, res, next) => {
-  console.log("checkPassword");
   try {
     const { email, password } = req.body;
-    console.log("email", email);
-    console.log("password", password);
     if (!email || !password) {
       return res
         .status(400)
@@ -73,11 +70,8 @@ export const checkPassword = async (req, res, next) => {
 
     // Find user by email, hash password and compare it:
     const orgUser = await User.findOne({ email: email });
-    console.log("orgUser", orgUser);
     const orgHashed = orgUser.password;
-    console.log("orgHashed", orgHashed);
     const match = await bcrypt.compare(password, orgHashed);
-    console.log("match", match);
     if (!match) {
       return res
         .status(400)
@@ -115,7 +109,7 @@ export const setCookie = async (req, res, next) => {
       maxAge: 1000 * 60 * 240,
       path: "/",
       httpOnly: true,
-      SameSite: "None",
+      sameSite: "None",
       secure: true,
     });
     return res
