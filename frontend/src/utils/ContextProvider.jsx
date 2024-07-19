@@ -3,11 +3,7 @@ import { createContext, useState, useContext } from "react";
 export const CalContext = createContext();
 
 const ContextProvider = ({ children }) => {
-  //
-  // ************* Change the serverURL to localhost here:  *************
-  //
-  const baseUrl = "https://clockworkclementineserver.onrender.com";
-  // const baseUrl = "http://localhost:3000";
+  const baseUrl = process.env.REACT_APP_BASE_URL;
 
   // utils:
   const [showCookieBox, setShowCookieBox] = useState(false);
