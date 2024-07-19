@@ -29,6 +29,27 @@ Three mongoose collections are in use (users, calendars and events). This made i
 
 <img src="./frontend/src/assets/screenshot.png" width="600">
 
+## Deployed Website
+
+Take a look at the deployed website here: [ClockworkClementine.onrender.com](https://ClockworkClementine.onrender.com/)
+
+### Important Notice
+
+**Registration and login will only work if you enable third-party cookies!** If your browser usually blocks these, please make sure to change the settings in your browser before accessing the website.
+
+For instance, in Google Chrome:
+
+1. Go to `Settings`
+2. Navigate to `Privacy and security`
+3. Click on `Third party cookies`
+4. Choose the option `Allow third-party cookies`
+
+### Pre-configured login data
+
+For demonstrational purposes, registration is also possible with a non-existing (fictive) email address. If you do not want to register at all, you may simply use the following login data:
+
+<img src="./frontend/src/assets/testLogin.png" alt="image of login" width="300">
+
 ## Installation and Local Usage
 
 To run the app locally on your device, follow these steps:
@@ -67,25 +88,3 @@ To run the app locally on your device, follow these steps:
 
 5. **Access the application:**
    Follow the link provided in your terminal to access the application.
-
-## Deployed Website
-
-Take a look at the deployed website here: [ClockworkClementine.onrender.com](https://ClockworkClementine.onrender.com/)
-
-### Important Notice
-
-**Registration and login will only work if you enable third-party cookies for this site.** If your browser usually blocks these, please make sure to add "clockworkclementine.onrender.com" to the Allow List.
-
-For instance, in Google Chrome:
-
-1. Go to `Settings`
-2. Navigate to `Privacy and security`
-3. Click on `Third party cookies`
-4. Go to `Sites allowed to use third-party cookies`
-5. Add "clockworkclementine.onrender.com" to the list
-
-### Pre-configured login data
-
-If you do not want to register, consider using the following login data:
-
-<img src="./frontend/src/assets/testLogin.png" alt="image of login" width="300">

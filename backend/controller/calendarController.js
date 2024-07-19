@@ -3,6 +3,41 @@ import { User } from "../models/userModel.js";
 import { Event } from "../models/eventModel.js";
 import { jwtVerify } from "../utils/jwt.js";
 
+/////////////////////// Check & verify accessToken ///////////////////////
+
+export const authenticateUser = async (req, res, next) => {
+  try {
+    const token = req.cookies["accessToken"];
+    if (!token) {
+      return res.status(400).json({
+        error: "Cookie is missing or has expanded. Please log in first.",
+      });
+    }
+    const verification = await jwtVerify(token);
+    if (!verification) {
+      return res
+        .status(400)
+        .json({ error: "Cookie could not be verified. Please log in first." });
+    }
+    req.user = verification;
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
+/////////////////////// Get all calendars of the user: ///////////////////////
+
+export const getUserCalendars = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const calendars = await Calendar.find({ user: id }).populate("events");
+    res.status(200).json({ calendars: calendars, user: req.user });
+  } catch (err) {
+    next(err);
+  }
+};
+
 /////////////////////// Create a new calendar: ///////////////////////
 
 export const postCalendar = async (req, res, next) => {
@@ -89,47 +124,8 @@ export const postCalendar = async (req, res, next) => {
   }
 };
 
-/////////////////////// Check & verify accessToken ///////////////////////
-export const authenticateUser = async (req, res, next) => {
-  console.log("authenticateUser");
-  try {
-    const token = req.cookies["accessToken"];
-    console.log("token", token);
-    if (!token) {
-      return res.status(400).json({
-        error: "Cookie is missing or has expanded. Please log in first.",
-      });
-    }
-    const verification = await jwtVerify(token);
-    console.log("verification", verification);
-    if (!verification) {
-      return res
-        .status(400)
-        .json({ error: "Cookie could not be verified. Please log in first." });
-    }
-    req.user = verification;
-    console.log("req.user", req.user);
-    next();
-  } catch (err) {
-    next(err);
-  }
-};
-
-/////////////////////// Get all calendars of the user: ///////////////////////
-export const getUserCalendars = async (req, res, next) => {
-  console.log("getUserCalendars");
-  try {
-    const { id } = req.user;
-    console.log("id", id);
-    const calendars = await Calendar.find({ user: id }).populate("events");
-    console.log("calendars", calendars);
-    res.status(200).json({ calendars: calendars, user: req.user });
-  } catch (err) {
-    next(err);
-  }
-};
-
 /////////////////////// Update a calendar: ///////////////////////
+
 export const updateCalendar = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -152,6 +148,7 @@ export const updateCalendar = async (req, res, next) => {
 };
 
 /////////////////////// Delete a calendar: ///////////////////////
+
 export const deleteCalendar = async (req, res, next) => {
   try {
     const { id } = req.params;

@@ -92,14 +92,11 @@ export const checkPassword = async (req, res, next) => {
 /////////////////////// Set a cookie: ///////////////////////
 
 export const setCookie = async (req, res, next) => {
-  console.log("setCookie");
   try {
     const { email } = req.body;
-    console.log("email", email);
 
     // Find user by email:
     const user = await User.findOne({ email: email });
-    console.log("user", user);
     if (!user) {
       return res
         .status(404)
@@ -107,7 +104,6 @@ export const setCookie = async (req, res, next) => {
     }
     // Create access token:
     const token = await jwtSign(email, user._id, user.username);
-    console.log("token", token);
     if (!token) {
       return res
         .status(500)
@@ -122,7 +118,6 @@ export const setCookie = async (req, res, next) => {
       SameSite: "None",
       secure: true,
     });
-    console.log("cookie set");
     return res
       .status(200)
       .json({ id: user._id, username: user.username, email: user.email });
