@@ -106,6 +106,7 @@ export const setCookie = async (req, res, next) => {
         .status(500)
         .json({ error: "Access token could not be created." });
     }
+    console.log("Token: ", token);
 
     // Set cookie:
     res.cookie("accessToken", token, {
@@ -115,6 +116,7 @@ export const setCookie = async (req, res, next) => {
       sameSite: "None",
       secure: process.env.NODE_ENV === "production",
     });
+    console.log("Cookie set");
     return res
       .status(200)
       .json({ id: user._id, username: user.username, email: user.email });

@@ -35,7 +35,7 @@ Take a look at the deployed website here: [ClockworkClementine.onrender.com](htt
 
 ### Important Notice
 
-**Registration and login will only work if you enable third-party cookies!** If your browser usually blocks these, please make sure to change the settings in your browser before accessing the website.
+**Registration and login will only work if you enable third-party cookies!** If your browser usually blocks those, please make sure to change the settings before accessing the website.
 
 For instance, in Google Chrome:
 
