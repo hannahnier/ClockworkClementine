@@ -3,7 +3,7 @@ import { createContext, useState, useContext } from "react";
 export const CalContext = createContext();
 
 const ContextProvider = ({ children }) => {
-  const baseUrl = process.env.REACT_APP_BASE_URL;
+  import.meta.env.VITE_BASE_URL;
 
   // utils:
   const [showCookieBox, setShowCookieBox] = useState(false);

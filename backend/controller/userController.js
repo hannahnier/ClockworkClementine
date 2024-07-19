@@ -1,7 +1,10 @@
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
 
 import { User } from "../models/userModel.js";
 import { jwtSign } from "../utils/jwt.js";
+
+dotenv.config();
 
 /////////////////////// Get a user: ///////////////////////
 
@@ -110,7 +113,7 @@ export const setCookie = async (req, res, next) => {
       path: "/",
       httpOnly: true,
       sameSite: "None",
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
     });
     return res
       .status(200)
@@ -124,7 +127,12 @@ export const setCookie = async (req, res, next) => {
 
 export const removeCookie = async (req, res, next) => {
   try {
-    res.clearCookie("accessToken");
+    res.clearCookie("accessToken", {
+      path: "/",
+      httpOnly: true,
+      sameSite: "None",
+      secure: process.env.NODE_ENV === "production",
+    });
     res.status(200).json({ user: null });
   } catch (err) {
     next(err);
