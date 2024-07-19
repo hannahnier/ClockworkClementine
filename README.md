@@ -61,30 +61,12 @@ To run the app locally on your device, follow these steps:
    cd repository
    ```
 
-2. **Set Server URL to Localhost:**
-   In `frontend/src/utils/ContextProvider.jsx`, make sure to set:
+2. **Install Dependencies and Start the Server and Client**
+   Install npm (node package manager) if necessary. Then, run the following pre-configured command that will install the required packages and start the server and the client:
 
    ```javascript
-   const baseUrl = "http://localhost:3000";
+    npm run startLocally
    ```
 
-3. **Install Dependencies:**
-   Install npm (node package manager) if necessary. Then, run the following commands to install the required packages:
-
-   ```javascript
-    npm install
-    cd frontend && npm install
-    cd ../backend && npm install
-    cd ..
-
-   ```
-
-4. **Start the Server and Client:**
-
-   ```javascript
-    cd backend && nodemon server.js
-    cd ../frontend && npm run dev
-   ```
-
-5. **Access the application:**
-   Follow the link provided in your terminal to access the application.
+3. **Access the application:**
+   In your browser, go to `http://localhost:5173/` (or simply follow the link provided in your terminal) to access the application.
