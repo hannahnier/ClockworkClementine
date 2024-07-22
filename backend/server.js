@@ -11,8 +11,10 @@ import { eventRouter } from "./router/eventRouter.js";
 
 // Load environment variables:
 dotenv.config();
-const { DB_CONNECTION_STRING, PORT } = process.env;
+const { DB_CONNECTION_STRING, PORT, NODE_ENV } = process.env;
 const port = PORT || 3000;
+
+console.log("Environment:", NODE_ENV);
 
 // Create express app:
 export const app = express();
@@ -25,16 +27,14 @@ app.use(
     origin: [
       "https://clockworkclementine.onrender.com",
       "http://localhost:5173",
+      "http://localhost:5174",
     ],
     credentials: true,
   })
 );
 
 // Connect to the database:
-if (
-  process.env.NODE_ENV === "production" ||
-  process.env.NODE_ENV === "development"
-) {
+if (NODE_ENV === "production" || NODE_ENV === "development") {
   await connectToDb(DB_CONNECTION_STRING);
 }
 
@@ -45,10 +45,7 @@ app.use("/api", eventRouter);
 app.use(errorMiddleware);
 
 // Start server:
-if (
-  process.env.NODE_ENV === "production" ||
-  process.env.NODE_ENV === "development"
-) {
+if (NODE_ENV === "production" || NODE_ENV === "development") {
   app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });

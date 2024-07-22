@@ -2,6 +2,9 @@ import { Calendar } from "../models/calendarModel.js";
 import { User } from "../models/userModel.js";
 import { Event } from "../models/eventModel.js";
 import { jwtVerify } from "../utils/jwt.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 /////////////////////// Check & verify accessToken ///////////////////////
 

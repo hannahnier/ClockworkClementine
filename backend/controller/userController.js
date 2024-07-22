@@ -5,6 +5,7 @@ import { User } from "../models/userModel.js";
 import { jwtSign } from "../utils/jwt.js";
 
 dotenv.config();
+const { NODE_ENV } = process.env;
 
 /////////////////////// Get a user: ///////////////////////
 
@@ -112,8 +113,8 @@ export const setCookie = async (req, res, next) => {
       maxAge: 1000 * 60 * 240,
       path: "/",
       httpOnly: true,
-      sameSite: "None",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: NODE_ENV === "production" ? "None" : "Lax",
+      secure: NODE_ENV === "production",
     });
     return res
       .status(200)
@@ -130,8 +131,8 @@ export const removeCookie = async (req, res, next) => {
     res.clearCookie("accessToken", {
       path: "/",
       httpOnly: true,
-      sameSite: "None",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: NODE_ENV === "production" ? "None" : "Lax",
+      secure: NODE_ENV === "production",
     });
     res.status(200).json({ user: null });
   } catch (err) {

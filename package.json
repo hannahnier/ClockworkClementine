@@ -1,7 +1,6 @@
 {
   "name": "clockworkclementine",
   "version": "1.0.0",
-  "description": "Clockwork Clementine is an event management system developed as part of a full-stack training program. While combining both backend and frontend technologies, its focus is clearly on the backend.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
