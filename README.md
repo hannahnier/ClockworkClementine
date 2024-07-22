@@ -13,6 +13,7 @@ The main goal was to create a seamless user experience for managing events insid
 - **Backend:** Node.js, Express, MongoDB, Mongoose, JWT
 - **Frontend:** React with Vite, React Big Calendar
 - **Styling:** Native CSS
+- **Testing:** Jest for automated testing, MongoDB Memory Server for in-memory database during tests, GitHub Actions for Continuous Integration
 
 ## Features
 
@@ -22,6 +23,7 @@ The main goal was to create a seamless user experience for managing events insid
 - **Data Validation:** Strong data validation and sanitization to ensure data integrity.
 - **Error Handling:** Error handling middleware, with important error messages being transferred to the frontend.
 - **Fully Responsive Design**
+- **Automated Testing:** Very basic automated testing with Continuous Integration (via GitHub Actions).
 
 ## Database Relations
 
