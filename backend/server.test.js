@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 
 // Use environment variables from .env.test instead of .env
 dotenv.config({ path: "./.env.test" });
+console.log(process.env.ACCESS_TOKEN_SECRET);
 
 let mongo;
 
@@ -34,10 +35,10 @@ afterAll(async () => {
 });
 
 describe("test registration of new user", () => {
-  it("create user successfully", async () => {
+  it("create user and create accessToken", async () => {
     const response = await request(app)
       .post("/users/register")
-      .send({ username: "xyz", email: "xyz@xy.de", password: "asdfjkloe" });
+      .send({ username: "xyz", email: "xyz@xy.de", password: "asdfjkl" });
     expect(response.statusCode).toBe(200);
     const newUser = response.body;
     console.log("newUser", newUser);
