@@ -15,7 +15,7 @@ const { DB_CONNECTION_STRING, PORT } = process.env;
 const port = PORT || 3000;
 
 // Create express app:
-const app = express();
+export const app = express();
 
 // Middleware:
 app.use(express.json());
@@ -31,7 +31,12 @@ app.use(
 );
 
 // Connect to the database:
-await connectToDb(DB_CONNECTION_STRING);
+if (
+  process.env.NODE_ENV === "production" ||
+  process.env.NODE_ENV === "development"
+) {
+  await connectToDb(DB_CONNECTION_STRING);
+}
 
 // Routes:
 app.use("/users", userRouter);
@@ -40,6 +45,11 @@ app.use("/api", eventRouter);
 app.use(errorMiddleware);
 
 // Start server:
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+if (
+  process.env.NODE_ENV === "production" ||
+  process.env.NODE_ENV === "development"
+) {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}
