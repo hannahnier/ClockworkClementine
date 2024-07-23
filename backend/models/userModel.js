@@ -23,6 +23,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
+      minlength: 8,
       set: function (input) {
         return validator.escape(input);
       },

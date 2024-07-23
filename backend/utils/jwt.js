@@ -2,9 +2,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
 dotenv.config();
-console.log(process.env);
 const { ACCESS_TOKEN_SECRET } = process.env;
-console.log("access token secret", ACCESS_TOKEN_SECRET);
 
 //  Create an accessToken:
 export const jwtSign = async (email, id, username) => {

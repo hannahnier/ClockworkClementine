@@ -14,8 +14,6 @@ dotenv.config();
 const { DB_CONNECTION_STRING, PORT, NODE_ENV } = process.env;
 const port = PORT || 3000;
 
-console.log("Environment:", NODE_ENV);
-
 // Create express app:
 export const app = express();
 

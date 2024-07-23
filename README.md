@@ -49,7 +49,7 @@ Take a look at the deployed website here: [ClockworkClementine.onrender.com](htt
 <!-- For demonstrational purposes, registration is also possible with a made-up (fictive) email address. Or simply use the following login dummy and replace the `[dot]` with an actual `.`
 
 - **Email:** test@test.de
-- **Password:** ac7[dot]g5x -->
+- **Password:** ac7[dot]g5xe -->
 
 ## Local Usage
 

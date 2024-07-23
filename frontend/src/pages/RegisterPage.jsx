@@ -109,6 +109,7 @@ const RegisterPage = () => {
                 name="password"
                 id="password"
                 required
+                minLength="8"
                 value={inputData.password}
                 onChange={(e) => {
                   setInputData({
