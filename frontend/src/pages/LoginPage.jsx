@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCalContext } from "../utils/ContextProvider";
+import { PulseLoader } from "react-spinners";
 import eye from "../assets/eye.svg";
 import eyeSlash from "../assets/eye-slash.svg";
 
@@ -16,8 +17,9 @@ const LoginPage = () => {
     password: "",
   });
 
-  // Control the password visibility:
+  // Control the password visibility and loading state:
   const [toggleShowPassword, setToggleShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Default states when the component mounts:
   useEffect(() => {
@@ -67,6 +69,7 @@ const LoginPage = () => {
         <div className="formContainer">
           <form
             onSubmit={(e) => {
+              setLoading(true);
               loginUser(e);
             }}
           >
@@ -106,10 +109,18 @@ const LoginPage = () => {
                 alt="icon for showing or hiding password"
               />
             </div>
-
-            <button type="submit" className="standardButton submitButton ">
-              Log in
-            </button>
+            {!loading && (
+              <button type="submit" className="standardButton submitButton ">
+                Log in
+              </button>
+            )}
+            {loading && (
+              <PulseLoader
+                color="#05c79d"
+                loading={loading}
+                aria-label="Loading Animation"
+              />
+            )}
           </form>
           <p>
             Don&apos;t have an account yet?{" "}
