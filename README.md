@@ -13,7 +13,7 @@ The main goal was to create a seamless user experience for managing events insid
 - **Backend:** Node.js, Express, MongoDB, Mongoose, JWT
 - **Frontend:** React with Vite, React Big Calendar
 - **Styling:** Native CSS
-- **Testing:** Jest for automated testing, MongoDB Memory Server for in-memory database during tests, GitHub Actions for Continuous Integration
+- **Testing:** Jest for simple automated testing, MongoDB Memory Server for in-memory database during tests, GitHub Actions for Continuous Integration
 
 ## Features
 
@@ -46,10 +46,10 @@ Take a look at the deployed website here: [ClockworkClementine.onrender.com](htt
 
 <!-- ### Login without registration -->
 
-For demonstrational purposes, registration is also possible with a made-up (fictive) email address. Or simply use the following login dummy and replace the `[dot]` with an actual `.`
+<!-- For demonstrational purposes, registration is also possible with a made-up (fictive) email address. Or simply use the following login dummy and replace the `[dot]` with an actual `.`
 
 - **Email:** test@test.de
-- **Password:** ac7[dot]g5x
+- **Password:** ac7[dot]g5x -->
 
 ## Local Usage
 
