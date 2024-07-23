@@ -46,10 +46,10 @@ Take a look at the deployed website here: [ClockworkClementine.onrender.com](htt
 
 <!-- ### Login without registration -->
 
-<!-- For demonstrational purposes, registration is also possible with a made-up (fictive) email address. Or simply use the following login dummy and replace the `[dot]` with an actual `.`
+For demonstrational purposes, registration is also possible with a made-up (fictive) email address. Or simply use the following login dummy and replace the `[dot]` with an actual `.`
 
-- **Email:** test@test.de
-- **Password:** ac7[dot]g5xe -->
+- **Email:** test@mail.de
+- **Password:** ac7[dot]g5xe
 
 ## Local Usage
 
