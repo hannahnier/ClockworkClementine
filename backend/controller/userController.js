@@ -7,8 +7,16 @@ import { jwtSign } from "../utils/jwt.js";
 dotenv.config();
 const { NODE_ENV } = process.env;
 
-/////////////////////// Get a user: ///////////////////////
+/////////////////////// Ping to Server: ///////////////////////
+export const ping = async (req, res, next) => {
+  try {
+    res.status(200).json({ message: "Server is running" });
+  } catch (err) {
+    next(err);
+  }
+};
 
+/////////////////////// Get a user: ///////////////////////
 export const getUser = async (req, res, next) => {
   try {
     const { id } = req.params;
