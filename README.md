@@ -6,7 +6,7 @@ The main goal was to create a seamless user experience for managing events insid
 
 ## Preview
 
-<img src="./frontend/src/assets/screenshot2.png" width="600">
+![App Screenshots](./frontend/src/assets/screenshot_clockwork.png)
 
 ## Technologies Used
 
@@ -29,7 +29,10 @@ The main goal was to create a seamless user experience for managing events insid
 
 Three mongoose collections are in use (users, calendars and events). This made it necessary to populate data and manage all collections effectively. The following image illustrates these interdependencies between users, calendars and events.
 
-<img src="./frontend/src/assets/screenshot.png" width="600">
+<details>
+<summary>Database Illustration</summary>
+
+<img src="./frontend/src/assets/screenshot.png" width="600"></details>
 
 ## Deployed Website
 
@@ -55,6 +58,9 @@ For demonstrational purposes, registration is also possible with a made-up (fict
 
 To run the app locally on your device, follow these steps:
 
+<details>
+<summary>Instructions</summary>
+
 1. **Clone the Repository and navigate to the project directory:**
 
    ```bash
@@ -71,3 +77,5 @@ To run the app locally on your device, follow these steps:
 
 3. **Access the application:**
    In your browser, go to `http://localhost:5173/` (or simply follow the link provided in your terminal) to access the application.
+
+</details>
